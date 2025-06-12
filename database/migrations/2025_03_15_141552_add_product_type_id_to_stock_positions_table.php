@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('stock_positions', function (Blueprint $table) {
-            // Переименовываем существующее поле, чтобы сохранить данные
-            $table->renameColumn('type', 'old_type');
-            
-            // Добавляем новое поле для внешнего ключа
-            $table->foreignId('product_type_id')->nullable()->after('old_type')
-                ->constrained('product_types')
-                ->onDelete('set null');
-        });
+        // TODO временно отключено для деплоя на Timeweb Cloud
+        // Schema::table('stock_positions', function (Blueprint $table) {
+        //     // Переименовываем существующее поле, чтобы сохранить данные
+        //     // $table->renameColumn('type', 'old_type');
+        //     
+        //     // Добавляем новое поле для внешнего ключа
+        //     // $table->foreignId('product_type_id')->nullable()->after('old_type')
+        //     //     ->constrained('product_types')
+        //     //     ->onDelete('set null');
+        // });
     }
 
     /**
@@ -27,10 +28,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('stock_positions', function (Blueprint $table) {
-            $table->dropForeign(['product_type_id']);
-            $table->dropColumn('product_type_id');
-            $table->renameColumn('old_type', 'type');
-        });
+        // TODO временно отключено
+        // Schema::table('stock_positions', function (Blueprint $table) {
+        //     $table->dropForeign(['product_type_id']);
+        //     $table->dropColumn('product_type_id');
+        //     $table->renameColumn('old_type', 'type');
+        // });
     }
 };
