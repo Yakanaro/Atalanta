@@ -14,23 +14,24 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // TODO временно отключено для деплоя, будет переработано
         // Перенос данных из старого поля в новое
-        $stockPositions = StockPosition::whereNotNull('old_type')->get();
-        
-        foreach ($stockPositions as $position) {
-            // Ищем соответствующий тип продукции по имени
-            $productType = ProductType::where('name', 'like', '%' . $position->old_type . '%')->first();
-            
-            if ($productType) {
-                $position->product_type_id = $productType->id;
-                $position->save();
-            }
-        }
-        
-        // Удаляем старое поле после переноса данных
-        Schema::table('stock_positions', function (Blueprint $table) {
-            $table->dropColumn('old_type');
-        });
+        // $stockPositions = StockPosition::whereNotNull('old_type')->get();
+        // 
+        // foreach ($stockPositions as $position) {
+        //     // Ищем соответствующий тип продукции по имени
+        //     $productType = ProductType::where('name', 'like', '%' . $position->old_type . '%')->first();
+        //     
+        //     if ($productType) {
+        //         $position->product_type_id = $productType->id;
+        //         $position->save();
+        //     }
+        // }
+        // 
+        // // Удаляем старое поле после переноса данных
+        // Schema::table('stock_positions', function (Blueprint $table) {
+        //     $table->dropColumn('old_type');
+        // });
     }
 
     /**
@@ -38,22 +39,23 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // TODO временно отключено
         // Добавляем старое поле обратно
-        Schema::table('stock_positions', function (Blueprint $table) {
-            $table->string('old_type')->nullable()->after('id');
-        });
-        
-        // Переносим данные обратно
-        $stockPositions = StockPosition::whereNotNull('product_type_id')->get();
-        
-        foreach ($stockPositions as $position) {
-            if ($position->product_type_id) {
-                $productType = ProductType::find($position->product_type_id);
-                if ($productType) {
-                    $position->old_type = $productType->name;
-                    $position->save();
-                }
-            }
-        }
+        // Schema::table('stock_positions', function (Blueprint $table) {
+        //     $table->string('old_type')->nullable()->after('id');
+        // });
+        // 
+        // // Переносим данные обратно
+        // $stockPositions = StockPosition::whereNotNull('product_type_id')->get();
+        // 
+        // foreach ($stockPositions as $position) {
+        //     if ($position->product_type_id) {
+        //         $productType = ProductType::find($position->product_type_id);
+        //         if ($productType) {
+        //             $position->old_type = $productType->name;
+        //             $position->save();
+        //         }
+        //     }
+        // }
     }
 };
