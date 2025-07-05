@@ -4,16 +4,21 @@ FROM php:8.2-fpm
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    ca-certificates \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
     zip \
     unzip \
-    nodejs \
-    npm \
     supervisor \
     cron \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Установка Node.js из официального репозитория NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
