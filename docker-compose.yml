@@ -51,7 +51,7 @@ services:
     environment:
       MYSQL_DATABASE: atalanta
       MYSQL_USER: atalanta
-      MYSQL_PASSWORD: atalanta_password
+      MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: root_password
     volumes:
       - mysql_data:/var/lib/mysql
@@ -88,7 +88,7 @@ services:
       - DB_HOST=mysql
       - DB_DATABASE=atalanta
       - DB_USERNAME=atalanta
-      - DB_PASSWORD=atalanta_password
+      - DB_PASSWORD=password
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - QUEUE_CONNECTION=redis
@@ -116,7 +116,7 @@ services:
       - DB_HOST=mysql
       - DB_DATABASE=atalanta
       - DB_USERNAME=atalanta
-      - DB_PASSWORD=atalanta_password
+      - DB_PASSWORD=password
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     depends_on:
