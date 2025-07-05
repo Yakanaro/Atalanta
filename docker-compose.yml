@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www
     volumes:
-      - ./.env:/var/www/.env:ro
+      - ./.env:/var/www/.env
       - ./storage:/var/www/storage
       - ./bootstrap/cache:/var/www/bootstrap/cache
     environment:
@@ -80,7 +80,7 @@ services:
     command: php artisan queue:work --tries=3 --timeout=60
     working_dir: /var/www
     volumes:
-      - ./.env:/var/www/.env:ro
+      - ./.env:/var/www/.env
       - ./storage:/var/www/storage
     environment:
       - APP_ENV=production
@@ -108,7 +108,7 @@ services:
     command: sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
     working_dir: /var/www
     volumes:
-      - ./.env:/var/www/.env:ro
+      - ./.env:/var/www/.env
       - ./storage:/var/www/storage
     environment:
       - APP_ENV=production
