@@ -5,27 +5,40 @@ RUN echo 'APT::Get::AllowUnauthenticated "true";' > /etc/apt/apt.conf.d/99ignore
     && echo 'Acquire::AllowInsecureRepositories "true";' >> /etc/apt/apt.conf.d/99ignore-gpg \
     && echo 'Acquire::AllowDowngradeToInsecureRepositories "true";' >> /etc/apt/apt.conf.d/99ignore-gpg
 
-# Установка системных зависимостей
+# Очистка кэша и установка базовых пакетов
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Установка основных пакетов
 RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
     git \
     curl \
     ca-certificates \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Установка development библиотек
+RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Установка утилит
+RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
     zip \
     unzip \
     supervisor \
     cron \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Установка Node.js из официального репозитория NodeSource
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Установка PHP расширений
 RUN docker-php-ext-install \
