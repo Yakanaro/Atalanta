@@ -47,14 +47,17 @@ RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interactio
 # Копирование package.json и package-lock.json
 COPY package*.json ./
 
-# Установка Node.js зависимостей
-RUN npm ci --only=production
+# Установка всех Node.js зависимостей (включая dev)
+RUN npm ci
 
-# Копирование всех файлов проекта
+# Копирование остальных файлов проекта
 COPY . .
 
 # Сборка фронтенда
 RUN npm run build
+
+# Удаление dev зависимостей
+RUN npm prune --production
 
 # Установка правильных прав доступа
 RUN chown -R www-data:www-data /var/www \

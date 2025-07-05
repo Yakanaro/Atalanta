@@ -60,11 +60,11 @@ php artisan key:generate --show
 ### 2. Сборка и запуск контейнеров
 
 ```bash
-# Сборка контейнеров
-docker-compose build
+# Сборка контейнеров (может занять время из-за сборки фронтенда)
+docker compose build
 
 # Запуск в production режиме
-docker-compose up -d
+docker compose up -d
 ```
 
 ### 3. Проверка статуса
