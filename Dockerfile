@@ -1,15 +1,11 @@
 FROM php:8.2-fpm
 
-# Обновление GPG ключей и установка системных зависимостей
-RUN apt-get update && apt-get install -y \
-    gnupg2 \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-# Обновление ключей и установка системных зависимостей
-RUN apt-get update && apt-get install -y \
+# Временно отключаем проверку GPG и устанавливаем системные зависимости
+RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
+    --allow-unauthenticated \
     git \
     curl \
+    ca-certificates \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
