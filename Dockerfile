@@ -1,8 +1,12 @@
 FROM php:8.2-fpm
 
-# Временно отключаем проверку GPG и устанавливаем системные зависимости
+# Настройка apt для игнорирования GPG проверок
+RUN echo 'APT::Get::AllowUnauthenticated "true";' > /etc/apt/apt.conf.d/99ignore-gpg \
+    && echo 'Acquire::AllowInsecureRepositories "true";' >> /etc/apt/apt.conf.d/99ignore-gpg \
+    && echo 'Acquire::AllowDowngradeToInsecureRepositories "true";' >> /etc/apt/apt.conf.d/99ignore-gpg
+
+# Установка системных зависимостей
 RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
-    --allow-unauthenticated \
     git \
     curl \
     ca-certificates \
