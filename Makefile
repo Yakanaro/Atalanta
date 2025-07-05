@@ -90,8 +90,6 @@ clean: ## Очистка Docker системы
 
 dev: ## Запуск в режиме разработки
 	@echo "$(GREEN)Запуск в режиме разработки...$(NC)"
-	docker compose -f docker-compose.yml -f docker-compose.override.yml up -d
+	docker compose up -d
 
-prod: ## Запуск в production режиме
-	@echo "$(GREEN)Запуск в production режиме...$(NC)"
-	docker compose -f docker-compose.yml up -d 
+ 
