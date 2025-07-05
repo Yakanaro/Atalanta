@@ -2,7 +2,7 @@
 set -e
 
 # Проверка переменных окружения
-if [ -z "$APP_KEY" ]; then
+if [ -z "$APP_KEY" ] && [ ! -f .env ] || [ -f .env ] && ! grep -q "APP_KEY=.*[^=]" .env; then
     echo "Генерация APP_KEY..."
     php artisan key:generate --ansi
 fi
