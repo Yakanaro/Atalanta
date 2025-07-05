@@ -14,7 +14,7 @@ services:
       - APP_ENV=production
       - APP_DEBUG=false
       - DB_HOST=mysql
-      - DB_DATABASE=atalanta_local
+      - DB_DATABASE=atalanta
       - DB_USERNAME=atalanta
       - DB_PASSWORD=password
       - REDIS_HOST=redis
