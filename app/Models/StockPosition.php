@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $qr_code_path
  * @property string|null $image_path
  * @property string|null $pallet_number
+ * @property string|null $weight
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\PolishType|null $polishType
@@ -39,6 +40,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereQrCodePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereImagePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition wherePalletNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereWeight($value)
  * @mixin \Eloquent
  */
 class StockPosition extends Model
@@ -54,6 +56,7 @@ class StockPosition extends Model
         'qr_code_path',
         'image_path',
         'pallet_number',
+        'weight',
     ];
 
     /**
@@ -123,5 +126,10 @@ class StockPosition extends Model
     public function getPalletNumber(): ?string
     {
         return $this->pallet_number;
+    }
+
+    public function getWeight(): ?float
+    {
+        return $this->weight;
     }
 }

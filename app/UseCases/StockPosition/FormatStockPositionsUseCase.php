@@ -13,17 +13,20 @@ class FormatStockPositionsUseCase
             $position->formatted_length = $this->formatNumber($position->getLength());
             $position->formatted_width = $this->formatNumber($position->getWidth());
             $position->formatted_thickness = $this->formatNumber($position->getThickness());
+            if (method_exists($position, 'getWeight')) {
+                $position->formatted_weight = $this->formatNumber($position->getWeight());
+            }
         }
-        
+
         return $stockPositions;
     }
-    
+
     private function formatNumber($number): string
     {
-        if (!is_numeric($number)) {
-            return $number;
+        if ($number === null || !is_numeric($number)) {
+            return '-';
         }
-        
-        return floor($number) == $number ? number_format($number, 0) : $number;
+
+        return floor($number) == $number ? number_format($number, 0) : (string)$number;
     }
-} 
+}

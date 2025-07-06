@@ -13,8 +13,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class StockPositionsExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithStyles
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return StockPosition::with(['polishType', 'productType'])->get();
@@ -31,6 +31,7 @@ class StockPositionsExport implements FromCollection, WithHeadings, WithMapping,
             'Длина (см)',
             'Ширина (см)',
             'Толщина (см)',
+            'Вес (кг)',
             'Количество',
             'Вид полировки',
             'Номер поддона',
@@ -51,6 +52,7 @@ class StockPositionsExport implements FromCollection, WithHeadings, WithMapping,
             $this->formatNumber($position->length),
             $this->formatNumber($position->width),
             $this->formatNumber($position->thickness),
+            $this->formatNumber($position->weight),
             $position->quantity,
             $position->polishType ? $position->polishType->name : '-',
             $position->pallet_number ?? '-',
@@ -81,7 +83,7 @@ class StockPositionsExport implements FromCollection, WithHeadings, WithMapping,
         if (!is_numeric($number)) {
             return (string)$number;
         }
-        
+
         return floor($number) == $number ? number_format($number, 0) : (string)$number;
     }
 }

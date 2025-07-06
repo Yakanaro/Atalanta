@@ -80,8 +80,14 @@ class StoreStockPositionRequest extends FormRequest
             'quantity' => $this->getQuantity(),
             'polish_type_id' => $this->getPolishTypeId(),
             'pallet_number' => $this->getPalletNumber(),
+            'weight' => $this->calculateWeight(),
         ];
 
         return $data;
     }
-} 
+
+    private function calculateWeight(): float
+    {
+        return round($this->getLength() * $this->getWidth() * $this->getThickness() * 0.0032, 2);
+    }
+}
