@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        $this->call([
-            PolishTypeSeeder::class,
-            ProductTypeSeeder::class,
-        ]);
+        // $this->call([
+        //     PolishTypeSeeder::class,
+        //     ProductTypeSeeder::class,
+        // ]);
 
         // Create default admin user
         User::updateOrCreate(
