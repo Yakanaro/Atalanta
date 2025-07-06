@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\StockPosition;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -19,6 +21,16 @@ class DatabaseSeeder extends Seeder
             PolishTypeSeeder::class,
             ProductTypeSeeder::class,
         ]);
+
+        // Create default admin user
+        User::updateOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('secret'),
+                'email_verified_at' => now(),
+            ]
+        );
 
         // StockPosition::factory()->create([
         //     'name' => 'Test User',
