@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PalletController;
 use App\Http\Controllers\Position\StockPositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
@@ -9,24 +10,25 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/dashboard', [StockPositionController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [PalletController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
-    
+
     Route::post('/settings/polish-types', [SettingsController::class, 'addPolishType'])->name('settings.polish-types.add');
     Route::put('/settings/polish-types/{polishType}', [SettingsController::class, 'updatePolishType'])->name('settings.polish-types.update');
     Route::delete('/settings/polish-types/{polishType}', [SettingsController::class, 'deletePolishType'])->name('settings.polish-types.delete');
-    
+
     Route::post('/settings/product-types', [SettingsController::class, 'addProductType'])->name('settings.product-types.add');
     Route::put('/settings/product-types/{productType}', [SettingsController::class, 'updateProductType'])->name('settings.product-types.update');
     Route::delete('/settings/product-types/{productType}', [SettingsController::class, 'deleteProductType'])->name('settings.product-types.delete');
 });
 
+// Маршруты для позиций
 Route::get('/stock-position/create', [StockPositionController::class, 'create'])->name('stockPosition.create');
 Route::post('/stock-position/store', [StockPositionController::class, 'store'])->name('stockPosition.store');
 Route::get('/stock-position/{stockPosition}', [StockPositionController::class, 'show'])->name('stockPosition.show');
@@ -36,4 +38,15 @@ Route::delete('/stock-position/{stockPosition}', [StockPositionController::class
 Route::get('/stock-position/{stockPosition}/download-qr', [StockPositionController::class, 'downloadQr'])->name('stockPosition.download-qr');
 Route::get('/stock-positions/export', [StockPositionController::class, 'export'])->name('stockPosition.export');
 
-require __DIR__.'/auth.php';
+// Маршруты для поддонов
+Route::middleware('auth')->group(function () {
+    Route::get('/pallet', [PalletController::class, 'index'])->name('pallet.index');
+    Route::get('/pallet/create', [PalletController::class, 'create'])->name('pallet.create');
+    Route::post('/pallet', [PalletController::class, 'store'])->name('pallet.store');
+    Route::get('/pallet/{pallet}', [PalletController::class, 'show'])->name('pallet.show');
+    Route::get('/pallet/{pallet}/edit', [PalletController::class, 'edit'])->name('pallet.edit');
+    Route::put('/pallet/{pallet}', [PalletController::class, 'update'])->name('pallet.update');
+    Route::delete('/pallet/{pallet}', [PalletController::class, 'destroy'])->name('pallet.destroy');
+});
+
+require __DIR__ . '/auth.php';

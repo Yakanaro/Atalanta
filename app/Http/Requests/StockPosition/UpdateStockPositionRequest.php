@@ -3,6 +3,7 @@
 namespace App\Http\Requests\StockPosition;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Pallet;
 
 class UpdateStockPositionRequest extends FormRequest
 {
@@ -20,6 +21,7 @@ class UpdateStockPositionRequest extends FormRequest
             'thickness' => 'required',
             'quantity' => 'required',
             'polish_type_id' => 'nullable|exists:polish_types,id',
+            'pallet_id' => 'nullable|exists:pallets,id',
             'pallet_number' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
@@ -55,6 +57,28 @@ class UpdateStockPositionRequest extends FormRequest
         return $this->validated('polish_type_id') ? (int)$this->validated('polish_type_id') : null;
     }
 
+    /**
+     * Получить ID поддона или создать новый поддон по номеру.
+     */
+    public function getPalletId(): ?int
+    {
+        // Если передан pallet_id, используем его
+        if ($this->validated('pallet_id')) {
+            return (int)$this->validated('pallet_id');
+        }
+
+        // Если передан pallet_number, находим или создаем поддон
+        if ($this->validated('pallet_number')) {
+            $pallet = Pallet::findOrCreateByNumber($this->validated('pallet_number'));
+            return $pallet->id;
+        }
+
+        return null;
+    }
+
+    /**
+     * Получить номер поддона для отображения.
+     */
     public function getPalletNumber(): ?string
     {
         return $this->validated('pallet_number');
@@ -79,7 +103,7 @@ class UpdateStockPositionRequest extends FormRequest
             'thickness' => $this->getThickness(),
             'quantity' => $this->getQuantity(),
             'polish_type_id' => $this->getPolishTypeId(),
-            'pallet_number' => $this->getPalletNumber(),
+            'pallet_id' => $this->getPalletId(),
             'weight' => $this->calculateWeight(),
         ];
 

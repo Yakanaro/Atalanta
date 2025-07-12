@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  *
  * @property int $id
+ * @property int|null $pallet_id
  * @property string $type
  * @property string $length
  * @property string $width
@@ -18,10 +19,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null $product_type_id
  * @property string|null $qr_code_path
  * @property string|null $image_path
- * @property string|null $pallet_number
  * @property string|null $weight
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Pallet|null $pallet
  * @property-read \App\Models\PolishType|null $polishType
  * @property-read \App\Models\ProductType|null $productType
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition newModelQuery()
@@ -30,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereLength($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition wherePalletId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition wherePolishTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereProductTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereQuantity($value)
@@ -39,7 +41,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereWidth($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereQrCodePath($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereImagePath($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition wherePalletNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|StockPosition whereWeight($value)
  * @mixin \Eloquent
  */
@@ -47,6 +48,7 @@ class StockPosition extends Model
 {
     protected $table = 'stock_positions';
     protected $fillable = [
+        'pallet_id',
         'length',
         'width',
         'thickness',
@@ -55,9 +57,16 @@ class StockPosition extends Model
         'product_type_id',
         'qr_code_path',
         'image_path',
-        'pallet_number',
         'weight',
     ];
+
+    /**
+     * Получить поддон, связанный с позицией на складе.
+     */
+    public function pallet(): BelongsTo
+    {
+        return $this->belongsTo(Pallet::class);
+    }
 
     /**
      * Получить тип полировки, связанный с позицией на складе.
@@ -123,13 +132,33 @@ class StockPosition extends Model
         return $this->image_path;
     }
 
+    /**
+     * Получить номер поддона.
+     */
     public function getPalletNumber(): ?string
     {
-        return $this->pallet_number;
+        return $this->pallet?->number;
+    }
+
+    /**
+     * Получить ID поддона.
+     */
+    public function getPalletId(): ?int
+    {
+        return $this->pallet_id;
     }
 
     public function getWeight(): ?float
     {
         return $this->weight;
+    }
+
+    /**
+     * Установить поддон по номеру (создать новый если не существует).
+     */
+    public function setPalletByNumber(string $palletNumber): void
+    {
+        $pallet = Pallet::findOrCreateByNumber($palletNumber);
+        $this->pallet_id = $pallet->id;
     }
 }

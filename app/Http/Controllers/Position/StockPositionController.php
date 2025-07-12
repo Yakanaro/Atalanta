@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Position;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StockPosition\StoreStockPositionRequest;
 use App\Http\Requests\StockPosition\UpdateStockPositionRequest;
+use App\Models\Pallet;
 use App\Models\PolishType;
 use App\Models\ProductType;
 use App\Models\StockPosition;
@@ -23,7 +24,7 @@ class StockPositionController extends Controller
 {
     private FilterStockPositionsUseCase $filterUseCase;
     private FormatStockPositionsUseCase $formatUseCase;
-    
+
     public function __construct(
         FilterStockPositionsUseCase $filterUseCase,
         FormatStockPositionsUseCase $formatUseCase
@@ -31,24 +32,31 @@ class StockPositionController extends Controller
         $this->filterUseCase = $filterUseCase;
         $this->formatUseCase = $formatUseCase;
     }
-    
+
     public function index(Request $request): View
     {
         $stockPositions = $this->filterUseCase->execute($request);
+
+        // Загружаем связанные поддоны
+        $stockPositions->load('pallet');
+
         $stockPositions = $this->formatUseCase->execute($stockPositions);
-        
+
         $productTypes = ProductType::getActive();
         $polishTypes = PolishType::getActive();
-        
+
         return view('dashboard', compact('stockPositions', 'productTypes', 'polishTypes'));
     }
 
-    public function create(): View
+    public function create(Request $request): View
     {
         $polishTypes = PolishType::getForSelect();
         $productTypes = ProductType::getForSelect();
-        
-        return view('stockPosition.create', compact('polishTypes', 'productTypes'));
+        $pallets = Pallet::getForSelect();
+
+        $selectedPalletId = $request->query('pallet_id');
+
+        return view('stockPosition.create', compact('polishTypes', 'productTypes', 'pallets', 'selectedPalletId'));
     }
 
     public function store(StoreStockPositionRequest $request): RedirectResponse
@@ -58,14 +66,14 @@ class StockPositionController extends Controller
 
             if ($request->hasImage()) {
                 $image = $request->getImage();
-                
+
                 if (!Storage::disk('public')->exists('position_images')) {
                     Storage::disk('public')->makeDirectory('position_images');
                 }
-                
+
                 $path = Storage::disk('public')->put('position_images', $image);
                 $url = Storage::url($path);
-                
+
                 $stockPosition->update([
                     'image_path' => $url
                 ]);
@@ -93,17 +101,17 @@ class StockPositionController extends Controller
             return redirect()
                 ->route('dashboard')
                 ->with('success', 'Позиция успешно создана. QR-код сгенерирован.');
-        } catch (Exception $exception) {    
+        } catch (Exception $exception) {
             return back()->with('error', $exception->getMessage());
         }
     }
 
     public function show(StockPosition $stockPosition): View
     {
-        $stockPosition->load(['polishType', 'productType']);
-        
+        $stockPosition->load(['polishType', 'productType', 'pallet']);
+
         $stockPosition = $this->formatUseCase->execute(collect([$stockPosition]))->first();
-        
+
         return view('stockPosition.show', compact('stockPosition'));
     }
 
@@ -111,8 +119,12 @@ class StockPositionController extends Controller
     {
         $polishTypes = PolishType::getForSelect();
         $productTypes = ProductType::getForSelect();
-        
-        return view('stockPosition.edit', compact('stockPosition', 'polishTypes', 'productTypes'));
+        $pallets = Pallet::getForSelect();
+
+        // Загружаем связанный поддон
+        $stockPosition->load('pallet');
+
+        return view('stockPosition.edit', compact('stockPosition', 'polishTypes', 'productTypes', 'pallets'));
     }
 
     public function update(UpdateStockPositionRequest $request, StockPosition $stockPosition): RedirectResponse
@@ -127,16 +139,16 @@ class StockPositionController extends Controller
                         Storage::disk('public')->delete($oldPath);
                     }
                 }
-                
+
                 $image = $request->getImage();
-                
+
                 if (!Storage::disk('public')->exists('position_images')) {
                     Storage::disk('public')->makeDirectory('position_images');
                 }
-                
+
                 $path = Storage::disk('public')->put('position_images', $image);
                 $url = Storage::url($path);
-                
+
                 $validated['image_path'] = $url;
             }
 
@@ -156,16 +168,16 @@ class StockPositionController extends Controller
             if ($stockPosition->getQrCodePath() && Storage::disk('public')->exists($stockPosition->getQrCodePath())) {
                 Storage::disk('public')->delete($stockPosition->getQrCodePath());
             }
-            
+
             if ($stockPosition->getImagePath()) {
                 $imagePath = str_replace('/storage/', '', parse_url($stockPosition->getImagePath(), PHP_URL_PATH));
                 if (Storage::disk('public')->exists($imagePath)) {
                     Storage::disk('public')->delete($imagePath);
                 }
             }
-            
+
             $stockPosition->delete();
-            
+
             return redirect()
                 ->route('dashboard')
                 ->with('success', 'Позиция успешно удалена.');
@@ -181,13 +193,13 @@ class StockPositionController extends Controller
         }
 
         $path = storage_path('app/public/' . $stockPosition->getQrCodePath());
-        
+
         if (!file_exists($path)) {
             return back()->with('error', 'Файл QR-кода не найден');
         }
 
         $fileName = 'qr_code_position_' . $stockPosition->id . '.svg';
-        
+
         return response()->download($path, $fileName);
     }
 
