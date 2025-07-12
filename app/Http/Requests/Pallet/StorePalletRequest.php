@@ -15,7 +15,7 @@ class StorePalletRequest extends FormRequest
     {
         return [
             'pallet_number' => 'required|string|max:255|unique:pallets,number',
-            'positions' => 'required|array|min:1',
+            'positions' => 'nullable|array',
             'positions.*.product_type_id' => 'required|exists:product_types,id',
             'positions.*.length' => 'required|numeric|min:0',
             'positions.*.width' => 'required|numeric|min:0',
@@ -30,8 +30,6 @@ class StorePalletRequest extends FormRequest
         return [
             'pallet_number.required' => 'Номер поддона обязателен для заполнения.',
             'pallet_number.unique' => 'Поддон с таким номером уже существует.',
-            'positions.required' => 'Необходимо добавить хотя бы одну позицию.',
-            'positions.min' => 'Необходимо добавить хотя бы одну позицию.',
             'positions.*.product_type_id.required' => 'Необходимо выбрать вид продукции.',
             'positions.*.product_type_id.exists' => 'Выбранный вид продукции не существует.',
             'positions.*.length.required' => 'Длина обязательна для заполнения.',
@@ -57,7 +55,7 @@ class StorePalletRequest extends FormRequest
 
     public function getPositions(): array
     {
-        $positions = $this->validated('positions');
+        $positions = $this->validated('positions') ?? [];
 
         // Добавляем расчет веса для каждой позиции
         foreach ($positions as &$position) {

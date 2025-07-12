@@ -26,7 +26,7 @@
 
             <div class="mb-4 flex justify-between items-center">
                 <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 hidden sm:block">Список поддонов</h2>
-                <div class="flex space-x-2">
+                <div class="flex flex-wrap gap-2">
                     <a href="{{ route('pallet.create') }}"
                         class="inline-block text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">
                         <span class="flex items-center">
@@ -43,6 +43,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
                             Добавить позицию
+                        </span>
+                    </a>
+                    <a href="{{ route('stockPosition.export') }}"
+                        class="inline-block text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
+                        <span class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                            </svg>
+                            Экспорт Excel
                         </span>
                     </a>
                 </div>

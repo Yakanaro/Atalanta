@@ -127,9 +127,12 @@
             </div>
             @endif
 
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div class="p-4 sm:p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
-                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Создание поддона с позициями</h2>
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Создание поддона</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Позиции можно добавить сейчас или позже</p>
+                    </div>
                     <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -155,7 +158,10 @@
                     <!-- Позиции -->
                     <div class="mb-6">
                         <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Позиции поддона</h3>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Позиции поддона</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Необязательно - можно добавить позиции позже</p>
+                            </div>
                             <button type="button" class="add-position" onclick="addPosition()">
                                 <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -165,57 +171,13 @@
                         </div>
 
                         <div id="positions-container">
-                            <!-- Первая позиция по умолчанию -->
-                            <div class="position-item" data-position="0">
-                                <div class="position-header">
-                                    <h4 class="text-md font-medium text-gray-900 dark:text-white">Позиция 1</h4>
-                                    <button type="button" class="remove-position" onclick="removePosition(0)" style="display: none;">
-                                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                        Удалить
-                                    </button>
-                                </div>
-
-                                <div class="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
-                                    <div>
-                                        <label for="positions[0][product_type_id]" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Вид продукции</label>
-                                        <select name="positions[0][product_type_id]" class="product-type-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                            <option value="">Выберите вид продукции</option>
-                                            @foreach($productTypes as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label for="positions[0][polish_type_id]" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Вид полировки</label>
-                                        <select name="positions[0][polish_type_id]" class="polish-type-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                            <option value="">Выберите вид полировки</option>
-                                            @foreach($polishTypes as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-4 mt-4">
-                                    <div>
-                                        <label for="positions[0][length]" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см)</label>
-                                        <input type="number" name="positions[0][length]" step="0.01" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Длина" required />
-                                    </div>
-                                    <div>
-                                        <label for="positions[0][width]" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см)</label>
-                                        <input type="number" name="positions[0][width]" step="0.01" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Ширина" required />
-                                    </div>
-                                    <div>
-                                        <label for="positions[0][thickness]" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см)</label>
-                                        <input type="number" name="positions[0][thickness]" step="0.01" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Толщина" required />
-                                    </div>
-                                    <div>
-                                        <label for="positions[0][quantity]" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Количество</label>
-                                        <input type="number" name="positions[0][quantity]" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Количество" required />
-                                    </div>
-                                </div>
+                            <!-- Позиции добавляются динамически -->
+                            <div class="text-center py-8 text-gray-500 dark:text-gray-400" id="empty-positions-message">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                </svg>
+                                <h3 class="mt-2 text-sm font-medium">Позиции не добавлены</h3>
+                                <p class="mt-1 text-sm">Нажмите "Добавить позицию" для добавления позиций к поддону</p>
                             </div>
                         </div>
                     </div>
@@ -234,11 +196,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        let positionCounter = 1;
+        let positionCounter = 0;
 
         $(document).ready(function() {
             initializeSelect2();
-            updateRemoveButtons();
+            updateEmptyMessage();
         });
 
         function initializeSelect2() {
@@ -320,27 +282,26 @@
             });
 
             positionCounter++;
-            updateRemoveButtons();
+            updateEmptyMessage();
         }
 
         function removePosition(index) {
             const positionElement = document.querySelector(`[data-position="${index}"]`);
             if (positionElement) {
                 positionElement.remove();
-                updateRemoveButtons();
+                updateEmptyMessage();
             }
         }
 
-        function updateRemoveButtons() {
+        function updateEmptyMessage() {
             const positions = document.querySelectorAll('.position-item');
-            positions.forEach((position, index) => {
-                const removeButton = position.querySelector('.remove-position');
-                if (positions.length > 1) {
-                    removeButton.style.display = 'inline-block';
-                } else {
-                    removeButton.style.display = 'none';
-                }
-            });
+            const emptyMessage = document.getElementById('empty-positions-message');
+            
+            if (positions.length === 0) {
+                emptyMessage.style.display = 'block';
+            } else {
+                emptyMessage.style.display = 'none';
+            }
         }
     </script>
     @endpush

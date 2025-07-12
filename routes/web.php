@@ -42,6 +42,7 @@ Route::get('/stock-positions/export', [StockPositionController::class, 'export']
 Route::middleware('auth')->group(function () {
     Route::get('/pallet', [PalletController::class, 'index'])->name('pallet.index');
     Route::get('/pallet/create', [PalletController::class, 'create'])->name('pallet.create');
+    Route::get('/pallet/export', [PalletController::class, 'export'])->name('pallet.export');
     Route::post('/pallet', [PalletController::class, 'store'])->name('pallet.store');
     Route::get('/pallet/{pallet}', [PalletController::class, 'show'])->name('pallet.show');
     Route::get('/pallet/{pallet}/edit', [PalletController::class, 'edit'])->name('pallet.edit');

@@ -7,6 +7,7 @@ use App\Models\Pallet;
 use App\Models\PolishType;
 use App\Models\ProductType;
 use App\Models\StockPosition;
+use App\Exports\PalletsExport;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PalletController extends Controller
 {
@@ -91,8 +93,10 @@ class PalletController extends Controller
                 'number' => $request->getPalletNumber(),
             ]);
 
-            // Создаем позиции для поддона
+            // Создаем позиции для поддона (если есть)
             $positions = $request->getPositions();
+            $positionsCount = count($positions);
+            
             foreach ($positions as $positionData) {
                 $stockPosition = StockPosition::create([
                     'pallet_id' => $pallet->id,
@@ -111,9 +115,13 @@ class PalletController extends Controller
 
             DB::commit();
 
+            $message = $positionsCount > 0 
+                ? 'Поддон успешно создан с ' . $positionsCount . ' позициями.'
+                : 'Поддон успешно создан. Позиции можно добавить позже.';
+
             return redirect()
                 ->route('pallet.show', $pallet)
-                ->with('success', 'Поддон успешно создан с ' . count($positions) . ' позициями.');
+                ->with('success', $message);
         } catch (Exception $exception) {
             DB::rollBack();
             return back()->with('error', 'Ошибка при создании поддона: ' . $exception->getMessage())->withInput();
@@ -231,5 +239,13 @@ class PalletController extends Controller
                 Storage::disk('public')->delete($imagePath);
             }
         }
+    }
+
+    /**
+     * Экспорт поддонов в Excel.
+     */
+    public function export()
+    {
+        return Excel::download(new PalletsExport, 'pallets.xlsx');
     }
 }
