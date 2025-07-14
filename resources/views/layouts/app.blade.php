@@ -55,22 +55,37 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        @include('layouts.navigation')
+    <!-- Pull to Refresh Container -->
+    <div class="pull-to-refresh-container">
+        <!-- Pull to Refresh Icon -->
+        <div id="pull-to-refresh-icon" class="pull-to-refresh-icon text-gray-600 dark:text-gray-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+        </div>
 
-        <!-- Page Heading -->
-        @isset($header)
-        <header class="bg-white dark:bg-gray-800 shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ $header }}
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+            <div class="pwa-navigation">
+                @include('layouts.navigation')
             </div>
-        </header>
-        @endisset
 
-        <!-- Page Content -->
-        <main>
-            {{ $slot }}
-        </main>
+            <!-- Page Heading -->
+            @isset($header)
+            <header class="bg-white dark:bg-gray-800 shadow pwa-main-content">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
+            @endisset
+
+            <!-- Page Content -->
+            <main class="pwa-main-content">
+                {{ $slot }}
+            </main>
+
+            <!-- Bottom Safe Area -->
+            <div class="pwa-bottom-safe"></div>
+        </div>
     </div>
 
     <!-- Flowbite JS -->
@@ -184,6 +199,69 @@
             if (installButton) {
                 installButton.style.display = 'none';
             }
+        });
+
+        // Pull to Refresh Functionality
+        let startY = 0;
+        let currentY = 0;
+        let isRefreshing = false;
+        let pullStarted = false;
+
+        const pullToRefreshIcon = document.getElementById('pull-to-refresh-icon');
+        const pullContainer = document.querySelector('.pull-to-refresh-container');
+
+        function handleTouchStart(e) {
+            if (window.scrollY === 0) {
+                startY = e.touches[0].clientY;
+                pullStarted = true;
+            }
+        }
+
+        function handleTouchMove(e) {
+            if (!pullStarted || isRefreshing || window.scrollY > 0) return;
+
+            currentY = e.touches[0].clientY;
+            const diffY = currentY - startY;
+
+            if (diffY > 0) {
+                e.preventDefault();
+
+                if (diffY > 60) {
+                    pullToRefreshIcon.classList.add('visible');
+                } else {
+                    pullToRefreshIcon.classList.remove('visible');
+                }
+            }
+        }
+
+        function handleTouchEnd(e) {
+            if (!pullStarted || isRefreshing) return;
+
+            pullStarted = false;
+            const diffY = currentY - startY;
+
+            if (diffY > 60) {
+                isRefreshing = true;
+                pullToRefreshIcon.classList.add('loading');
+
+                // Обновляем страницу
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                pullToRefreshIcon.classList.remove('visible');
+            }
+        }
+
+        // Добавляем обработчики событий
+        document.addEventListener('touchstart', handleTouchStart, {
+            passive: false
+        });
+        document.addEventListener('touchmove', handleTouchMove, {
+            passive: false
+        });
+        document.addEventListener('touchend', handleTouchEnd, {
+            passive: false
         });
     </script>
 

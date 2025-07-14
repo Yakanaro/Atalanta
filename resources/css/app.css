@@ -1,3 +1,154 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* PWA Safe Area Styles for iOS */
+@supports (padding: max(0px)) {
+    .safe-area-inset-top {
+        padding-top: max(env(safe-area-inset-top), 0px);
+    }
+    
+    .safe-area-inset-bottom {
+        padding-bottom: max(env(safe-area-inset-bottom), 0px);
+    }
+    
+    .safe-area-inset-left {
+        padding-left: max(env(safe-area-inset-left), 0px);
+    }
+    
+    .safe-area-inset-right {
+        padding-right: max(env(safe-area-inset-right), 0px);
+    }
+}
+
+/* Navigation Bar Safe Area */
+.pwa-navigation {
+    padding-top: env(safe-area-inset-top);
+}
+
+/* Main Content Safe Area */
+.pwa-main-content {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
+
+/* Bottom Safe Area */
+.pwa-bottom-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Pull to Refresh Styles */
+.pull-to-refresh-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.pull-to-refresh-icon {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 24px;
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.pull-to-refresh-icon.visible {
+    opacity: 1;
+    top: 20px;
+}
+
+.pull-to-refresh-icon.loading {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(360deg); }
+}
+
+/* Disable overscroll behavior for better PWA experience */
+body {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* iOS PWA Status Bar */
+@media (display-mode: standalone) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    /* Adjust navigation for standalone mode */
+    .pwa-navigation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark .pwa-navigation {
+        background-color: rgba(31, 41, 55, 0.95);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Adjust main content for fixed navigation */
+    .pwa-main-content {
+        padding-top: calc(64px + env(safe-area-inset-top));
+    }
+}
+
+/* Fix for iOS Safari viewport height issue */
+@supports (-webkit-touch-callout: none) {
+    .min-h-screen {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Disable text selection on buttons for better mobile experience */
+button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Improve touch targets */
+button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Responsive table for mobile */
+@media (max-width: 768px) {
+    .responsive-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .responsive-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .responsive-table th,
+    .responsive-table td {
+        padding: 8px 12px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .dark .responsive-table th,
+    .dark .responsive-table td {
+        border-bottom: 1px solid #374151;
+    }
+}

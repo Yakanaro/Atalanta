@@ -4,13 +4,17 @@
   "description": "Система управления поддонами и складскими позициями",
   "start_url": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "prefer_related_applications": false,
   "theme_color": "#1f2937",
-  "background_color": "#f9fafb",
-  "orientation": "portrait",
+  "background_color": "#111827",
+  "orientation": "portrait-primary",
   "scope": "/",
   "lang": "ru",
   "dir": "ltr",
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -29,9 +33,31 @@
       "sizes": "48x48",
       "type": "image/x-icon",
       "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
-  "categories": ["productivity", "business"],
+  "categories": ["productivity", "business", "utilities"],
+  "screenshots": [
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Главная страница системы"
+    },
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Мобильная версия"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Главная",
@@ -48,11 +74,25 @@
       "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     },
     {
+      "name": "Добавить позицию",
+      "short_name": "Новая позиция",
+      "description": "Добавить новую складскую позицию",
+      "url": "/stock-position/create",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
       "name": "Настройки",
       "short_name": "Настройки",
       "description": "Открыть настройки",
       "url": "/settings",
       "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }
-  ]
+  ],
+  "protocol_handlers": [],
+  "handle_links": "preferred",
+  "launch_handler": {
+    "client_mode": ["navigate-existing", "navigate-new"]
+  },
+  "related_applications": [],
+  "prefer_related_applications": false
 } 
