@@ -9,6 +9,7 @@ use App\Models\Pallet;
 use App\Models\PolishType;
 use App\Models\ProductType;
 use App\Models\StockPosition;
+use App\Models\StoneType;
 use App\UseCases\StockPosition\FilterStockPositionsUseCase;
 use App\UseCases\StockPosition\FormatStockPositionsUseCase;
 use Exception;
@@ -52,11 +53,12 @@ class StockPositionController extends Controller
     {
         $polishTypes = PolishType::getForSelect();
         $productTypes = ProductType::getForSelect();
+        $stoneTypes = StoneType::getForSelect();
         $pallets = Pallet::getForSelect();
 
         $selectedPalletId = $request->query('pallet_id');
 
-        return view('stockPosition.create', compact('polishTypes', 'productTypes', 'pallets', 'selectedPalletId'));
+        return view('stockPosition.create', compact('polishTypes', 'productTypes', 'stoneTypes', 'pallets', 'selectedPalletId'));
     }
 
     public function store(StoreStockPositionRequest $request): RedirectResponse
@@ -91,7 +93,7 @@ class StockPositionController extends Controller
 
     public function show(StockPosition $stockPosition): View
     {
-        $stockPosition->load(['polishType', 'productType', 'pallet']);
+        $stockPosition->load(['polishType', 'productType', 'pallet', 'stoneType']);
 
         $stockPosition = $this->formatUseCase->execute(collect([$stockPosition]))->first();
 
@@ -102,12 +104,13 @@ class StockPositionController extends Controller
     {
         $polishTypes = PolishType::getForSelect();
         $productTypes = ProductType::getForSelect();
+        $stoneTypes = StoneType::getForSelect();
         $pallets = Pallet::getForSelect();
 
         // Загружаем связанный поддон
         $stockPosition->load('pallet');
 
-        return view('stockPosition.edit', compact('stockPosition', 'polishTypes', 'productTypes', 'pallets'));
+        return view('stockPosition.edit', compact('stockPosition', 'polishTypes', 'productTypes', 'stoneTypes', 'pallets'));
     }
 
     public function update(UpdateStockPositionRequest $request, StockPosition $stockPosition): RedirectResponse

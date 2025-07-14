@@ -148,7 +148,7 @@ class PalletController extends Controller
      */
     public function show(Pallet $pallet): View
     {
-        $pallet->load(['stockPositions.productType', 'stockPositions.polishType']);
+        $pallet->load(['stockPositions.productType', 'stockPositions.polishType', 'stockPositions.stoneType']);
 
         return view('pallet.show', compact('pallet'));
     }
@@ -158,7 +158,7 @@ class PalletController extends Controller
      */
     public function edit(Pallet $pallet): View
     {
-        $pallet->load(['stockPositions.productType', 'stockPositions.polishType']);
+        $pallet->load(['stockPositions.productType', 'stockPositions.polishType', 'stockPositions.stoneType']);
 
         return view('pallet.edit', compact('pallet'));
     }
