@@ -1,4 +1,4 @@
-const CACHE_NAME = 'atalanta-v2';
+const CACHE_NAME = 'atalanta-v3';
 const urlsToCache = [
   '/',
   '/dashboard',
@@ -9,8 +9,7 @@ const urlsToCache = [
   '/js/app.js',
   '/favicon.ico',
   '/favicon.svg',
-  '/icon-192x192.png',
-  '/icon-512x512.png',
+  '/icon.svg',
   '/manifest.json',
   'https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap',
   'https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css',
@@ -101,15 +100,15 @@ self.addEventListener('push', event => {
     const data = event.data.json();
     const options = {
       body: data.body,
-      icon: '/icon-192x192.png',
-      badge: '/icon-192x192.png',
+      icon: '/icon.svg',
+      badge: '/icon.svg',
       tag: 'atalanta-notification',
       requireInteraction: true,
       actions: [
         {
           action: 'open',
           title: 'Открыть',
-          icon: '/icon-192x192.png'
+          icon: '/icon.svg'
         },
         {
           action: 'close',

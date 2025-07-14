@@ -16,22 +16,25 @@
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#1f2937">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Atalanta">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Atalanta">
     <meta name="msapplication-TileColor" content="#1f2937">
     <meta name="msapplication-tap-highlight" content="no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-touch-fullscreen" content="yes">
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="{{ asset('manifest.json') }}">
 
     <!-- PWA Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icon-192x192.png') }}">
-    <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('icon-512x512.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('icon-192x192.png') }}">
-    <link rel="apple-touch-icon" sizes="192x192" href="{{ asset('icon-192x192.png') }}">
-    <link rel="apple-touch-icon" sizes="512x512" href="{{ asset('icon-512x512.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('icon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icon.svg') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icon.svg') }}">
+    <link rel="apple-touch-icon" sizes="192x192" href="{{ asset('icon.svg') }}">
+    <link rel="apple-touch-icon" sizes="512x512" href="{{ asset('icon.svg') }}">
+    <link rel="apple-touch-startup-image" href="{{ asset('icon.svg') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

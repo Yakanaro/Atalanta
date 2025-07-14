@@ -2,9 +2,8 @@
   "name": "Atalanta - Складская система",
   "short_name": "Atalanta",
   "description": "Система управления поддонами и складскими позициями",
-  "start_url": "/",
+  "start_url": "/?utm_source=pwa",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone"],
   "prefer_related_applications": false,
   "theme_color": "#1f2937",
   "background_color": "#111827",
@@ -17,43 +16,37 @@
   },
   "icons": [
     {
-      "src": "/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
-    },
-    {
-      "src": "/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/favicon.ico",
-      "sizes": "48x48",
-      "type": "image/x-icon",
-      "purpose": "any"
     },
     {
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon",
+      "purpose": "any"
     }
   ],
   "categories": ["productivity", "business", "utilities"],
   "screenshots": [
     {
-      "src": "/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "form_factor": "wide",
       "label": "Главная страница системы"
     },
     {
-      "src": "/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "form_factor": "narrow",
       "label": "Мобильная версия"
     }
@@ -64,28 +57,28 @@
       "short_name": "Главная", 
       "description": "Открыть главную страницу",
       "url": "/",
-      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
     },
     {
       "name": "Создать поддон",
       "short_name": "Новый поддон",
       "description": "Создать новый поддон",
       "url": "/pallet/create",
-      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
     },
     {
       "name": "Добавить позицию",
       "short_name": "Новая позиция",
       "description": "Добавить новую складскую позицию",
       "url": "/stock-position/create",
-      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
     },
     {
       "name": "Настройки",
       "short_name": "Настройки",
       "description": "Открыть настройки",
       "url": "/settings",
-      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
     }
   ],
   "protocol_handlers": [],
