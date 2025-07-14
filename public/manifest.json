@@ -1,91 +1,13 @@
 {
-  "name": "Atalanta - Складская система",
+  "name": "Atalanta",
   "short_name": "Atalanta",
-  "description": "Система управления поддонами и складскими позициями",
-  "start_url": "/?utm_source=pwa",
-  "display": "standalone",
-  "prefer_related_applications": false,
-  "theme_color": "#1f2937",
-  "background_color": "#111827",
-  "orientation": "portrait-primary",
-  "scope": "/",
-  "lang": "ru",
-  "dir": "ltr",
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
+  "display": "browser",
+  "start_url": "/",
   "icons": [
-    {
-      "src": "/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
     {
       "src": "/favicon.ico",
       "sizes": "48x48",
-      "type": "image/x-icon",
-      "purpose": "any"
+      "type": "image/x-icon"
     }
-  ],
-  "categories": ["productivity", "business", "utilities"],
-  "screenshots": [
-    {
-      "src": "/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "form_factor": "wide",
-      "label": "Главная страница системы"
-    },
-    {
-      "src": "/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "form_factor": "narrow",
-      "label": "Мобильная версия"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Главная",
-      "short_name": "Главная", 
-      "description": "Открыть главную страницу",
-      "url": "/",
-      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
-    },
-    {
-      "name": "Создать поддон",
-      "short_name": "Новый поддон",
-      "description": "Создать новый поддон",
-      "url": "/pallet/create",
-      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
-    },
-    {
-      "name": "Добавить позицию",
-      "short_name": "Новая позиция",
-      "description": "Добавить новую складскую позицию",
-      "url": "/stock-position/create",
-      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
-    },
-    {
-      "name": "Настройки",
-      "short_name": "Настройки",
-      "description": "Открыть настройки",
-      "url": "/settings",
-      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
-    }
-  ],
-  "protocol_handlers": [],
-  "handle_links": "preferred",
-  "launch_handler": {
-    "client_mode": ["navigate-existing", "navigate-new"]
-  },
-  "related_applications": [],
-  "prefer_related_applications": false
+  ]
 } 
