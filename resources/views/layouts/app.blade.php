@@ -12,6 +12,24 @@
         <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
         <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
 
+        <!-- PWA Meta Tags -->
+        <meta name="theme-color" content="#1f2937">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="Atalanta">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="application-name" content="Atalanta">
+        <meta name="msapplication-TileColor" content="#1f2937">
+        <meta name="msapplication-tap-highlight" content="no">
+        
+        <!-- PWA Manifest -->
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
+        
+        <!-- PWA Icons -->
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icon-192x192.png') }}">
+        <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('icon-512x512.png') }}">
+        <link rel="apple-touch-icon" sizes="192x192" href="{{ asset('icon-192x192.png') }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -111,6 +129,54 @@
                 
                 if (themeToggleBtnMobile) {
                     themeToggleBtnMobile.addEventListener('click', toggleTheme);
+                }
+            });
+        </script>
+
+        <!-- PWA Scripts -->
+        <script>
+            // Регистрация Service Worker
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(function(registration) {
+                            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                        })
+                        .catch(function(error) {
+                            console.log('ServiceWorker registration failed: ', error);
+                        });
+                });
+            }
+
+            // PWA Install Prompt
+            let deferredPrompt;
+            const installButton = document.getElementById('pwa-install-btn');
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (installButton) {
+                    installButton.style.display = 'block';
+                }
+            });
+
+            if (installButton) {
+                installButton.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        console.log(`User response to the install prompt: ${outcome}`);
+                        deferredPrompt = null;
+                        installButton.style.display = 'none';
+                    }
+                });
+            }
+
+            // Скрыть кнопку если приложение уже установлено
+            window.addEventListener('appinstalled', (evt) => {
+                console.log('PWA was installed');
+                if (installButton) {
+                    installButton.style.display = 'none';
                 }
             });
         </script>
