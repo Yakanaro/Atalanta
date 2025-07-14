@@ -106,6 +106,28 @@
                             </select>
                         </div>
 
+                        <div>
+                            <label for="mobile_filter_stone_type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тип камня</label>
+                            <select id="mobile_filter_stone_type" name="filter_stone_type_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">Все типы</option>
+                                @foreach($stoneTypes as $stoneType)
+                                <option value="{{ $stoneType->id }}" {{ request('filter_stone_type_id') == $stoneType->id ? 'selected' : '' }}>{{ $stoneType->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="mobile_filter_status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Статус поддона</label>
+                            <select id="mobile_filter_status" name="filter_status"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">Все статусы</option>
+                                @foreach($palletStatuses as $statusKey => $statusLabel)
+                                <option value="{{ $statusKey }}" {{ request('filter_status') == $statusKey ? 'selected' : '' }}>{{ $statusLabel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <div class="flex space-x-2">
                             <button type="submit" class="flex-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                 Фильтровать
@@ -133,7 +155,7 @@
                 </button>
 
                 <div id="desktop-filter-panel" class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 hidden">
-                    <form action="{{ route('dashboard') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <form action="{{ route('dashboard') }}" method="GET" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
                         <div>
                             <label for="filter_pallet_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Номер поддона</label>
                             <input type="text" id="filter_pallet_number" name="filter_pallet_number" value="{{ request('filter_pallet_number') }}"
@@ -163,6 +185,28 @@
                             </select>
                         </div>
 
+                        <div>
+                            <label for="filter_stone_type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тип камня</label>
+                            <select id="filter_stone_type" name="filter_stone_type_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">Все типы</option>
+                                @foreach($stoneTypes as $stoneType)
+                                <option value="{{ $stoneType->id }}" {{ request('filter_stone_type_id') == $stoneType->id ? 'selected' : '' }}>{{ $stoneType->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="filter_status" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Статус поддона</label>
+                            <select id="filter_status" name="filter_status"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">Все статусы</option>
+                                @foreach($palletStatuses as $statusKey => $statusLabel)
+                                <option value="{{ $statusKey }}" {{ request('filter_status') == $statusKey ? 'selected' : '' }}>{{ $statusLabel }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <div class="flex items-end space-x-2">
                             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                 Фильтровать
@@ -176,12 +220,15 @@
             </div>
 
             <!-- Таблица для десктопов (скрыта на мобильных) -->
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg hidden md:block">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg hidden md:block" style="min-height: 400px;">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">
                                 Номер поддона
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Статус
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Позиций
@@ -206,6 +253,14 @@
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ $pallet->number }}
                             </th>
+                            <td class="px-6 py-4">
+                                @php
+                                $statusData = $pallet->getStatusWithClass();
+                                @endphp
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusData['class'] }}">
+                                    {{ $statusData['status'] }}
+                                </span>
+                            </td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                     {{ $pallet->stock_positions_count }}
@@ -278,7 +333,9 @@
                                                         Да, удалить
                                                     </button>
                                                 </form>
-                                                <button data-modal-hide="deleteModal-{{ $pallet->id }}" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Отмена</button>
+                                                <button data-modal-hide="deleteModal-{{ $pallet->id }}" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                                                    Отмена
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -289,8 +346,22 @@
 
                         @if(count($pallets) === 0)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                                Нет данных
+                            <td colspan="7" class="px-6 py-20 text-center text-gray-500 dark:text-gray-400">
+                                <div class="flex flex-col items-center justify-center space-y-4">
+                                    <svg class="w-16 h-16 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="text-lg font-medium text-gray-900 dark:text-white">Нет поддонов</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Создайте первый поддон, чтобы начать работу</p>
+                                    </div>
+                                    <a href="{{ route('pallet.create') }}" class="inline-flex items-center px-4 py-2 bg-purple-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-purple-700 active:bg-purple-900 focus:outline-none focus:border-purple-900 focus:ring ring-purple-300 disabled:opacity-25 transition ease-in-out duration-150">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        Создать поддон
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                         @endif
@@ -316,6 +387,12 @@
                         <div>
                             <h3 class="font-bold text-gray-900 dark:text-white">Поддон {{ $pallet->number }}</h3>
                             <p class="text-xs text-gray-500 dark:text-gray-400">{{ $pallet->created_at->format('d.m.Y H:i') }}</p>
+                            @php
+                            $statusData = $pallet->getStatusWithClass();
+                            @endphp
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusData['class'] }}">
+                                {{ $statusData['status'] }}
+                            </span>
                         </div>
                         <div class="flex space-x-2">
                             <a href="{{ route('pallet.show', $pallet->id) }}"

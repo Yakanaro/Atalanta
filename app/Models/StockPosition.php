@@ -55,6 +55,7 @@ class StockPosition extends Model
         'quantity',
         'polish_type_id',
         'product_type_id',
+        'stone_type_id',
         'qr_code_path',
         'image_path',
         'weight',
@@ -82,6 +83,14 @@ class StockPosition extends Model
     public function productType(): BelongsTo
     {
         return $this->belongsTo(ProductType::class);
+    }
+
+    /**
+     * Получить вид камня, связанный с позицией на складе.
+     */
+    public function stoneType(): BelongsTo
+    {
+        return $this->belongsTo(StoneType::class);
     }
 
     public function getType(): string

@@ -79,28 +79,11 @@ class StockPositionController extends Controller
                 ]);
             }
 
-            $qrData = route('stockPosition.show', $stockPosition->id);
-
-            $fileName = 'qr_code_' . $stockPosition->id . '.svg';
-            $filePath = 'qr_codes/' . $fileName;
-
-            if (!Storage::disk('public')->exists('qr_codes')) {
-                Storage::disk('public')->makeDirectory('qr_codes');
-            }
-
-            QrCode::format('svg')
-                ->size(200)
-                ->margin(1)
-                ->encoding('UTF-8')
-                ->generate($qrData, storage_path('app/public/' . $filePath));
-
-            $stockPosition->update([
-                'qr_code_path' => $filePath
-            ]);
+            // QR-код теперь генерируется для поддона, а не для позиций
 
             return redirect()
                 ->route('dashboard')
-                ->with('success', 'Позиция успешно создана. QR-код сгенерирован.');
+                ->with('success', 'Позиция успешно создана.');
         } catch (Exception $exception) {
             return back()->with('error', $exception->getMessage());
         }
@@ -165,10 +148,6 @@ class StockPositionController extends Controller
     public function destroy(StockPosition $stockPosition): RedirectResponse
     {
         try {
-            if ($stockPosition->getQrCodePath() && Storage::disk('public')->exists($stockPosition->getQrCodePath())) {
-                Storage::disk('public')->delete($stockPosition->getQrCodePath());
-            }
-
             if ($stockPosition->getImagePath()) {
                 $imagePath = str_replace('/storage/', '', parse_url($stockPosition->getImagePath(), PHP_URL_PATH));
                 if (Storage::disk('public')->exists($imagePath)) {
@@ -186,22 +165,7 @@ class StockPositionController extends Controller
         }
     }
 
-    public function downloadQr(StockPosition $stockPosition)
-    {
-        if (!$stockPosition->getQrCodePath()) {
-            return back()->with('error', 'QR-код не найден');
-        }
 
-        $path = storage_path('app/public/' . $stockPosition->getQrCodePath());
-
-        if (!file_exists($path)) {
-            return back()->with('error', 'Файл QR-кода не найден');
-        }
-
-        $fileName = 'qr_code_position_' . $stockPosition->id . '.svg';
-
-        return response()->download($path, $fileName);
-    }
 
     public function export()
     {

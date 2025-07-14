@@ -14,7 +14,6 @@ class StorePalletRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pallet_number' => 'required|string|max:255|unique:pallets,number',
             'positions' => 'nullable|array',
             'positions.*.product_type_id' => 'required|exists:product_types,id',
             'positions.*.length' => 'required|numeric|min:0',
@@ -28,8 +27,6 @@ class StorePalletRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'pallet_number.required' => 'Номер поддона обязателен для заполнения.',
-            'pallet_number.unique' => 'Поддон с таким номером уже существует.',
             'positions.*.product_type_id.required' => 'Необходимо выбрать вид продукции.',
             'positions.*.product_type_id.exists' => 'Выбранный вид продукции не существует.',
             'positions.*.length.required' => 'Длина обязательна для заполнения.',
@@ -46,11 +43,6 @@ class StorePalletRequest extends FormRequest
             'positions.*.quantity.min' => 'Количество должно быть больше 0.',
             'positions.*.polish_type_id.exists' => 'Выбранный вид полировки не существует.',
         ];
-    }
-
-    public function getPalletNumber(): string
-    {
-        return $this->validated('pallet_number');
     }
 
     public function getPositions(): array

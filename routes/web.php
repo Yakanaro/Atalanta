@@ -26,6 +26,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/settings/product-types', [SettingsController::class, 'addProductType'])->name('settings.product-types.add');
     Route::put('/settings/product-types/{productType}', [SettingsController::class, 'updateProductType'])->name('settings.product-types.update');
     Route::delete('/settings/product-types/{productType}', [SettingsController::class, 'deleteProductType'])->name('settings.product-types.delete');
+
+    Route::post('/settings/stone-types', [SettingsController::class, 'addStoneType'])->name('settings.stone-types.add');
+    Route::put('/settings/stone-types/{stoneType}', [SettingsController::class, 'updateStoneType'])->name('settings.stone-types.update');
+    Route::delete('/settings/stone-types/{stoneType}', [SettingsController::class, 'deleteStoneType'])->name('settings.stone-types.delete');
 });
 
 // Маршруты для позиций
@@ -35,7 +39,7 @@ Route::get('/stock-position/{stockPosition}', [StockPositionController::class, '
 Route::get('/stock-position/{stockPosition}/edit', [StockPositionController::class, 'edit'])->name('stockPosition.edit');
 Route::put('/stock-position/{stockPosition}', [StockPositionController::class, 'update'])->name('stockPosition.update');
 Route::delete('/stock-position/{stockPosition}', [StockPositionController::class, 'destroy'])->name('stockPosition.destroy');
-Route::get('/stock-position/{stockPosition}/download-qr', [StockPositionController::class, 'downloadQr'])->name('stockPosition.download-qr');
+
 Route::get('/stock-positions/export', [StockPositionController::class, 'export'])->name('stockPosition.export');
 
 // Маршруты для поддонов
@@ -47,6 +51,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/pallet/{pallet}', [PalletController::class, 'show'])->name('pallet.show');
     Route::get('/pallet/{pallet}/edit', [PalletController::class, 'edit'])->name('pallet.edit');
     Route::put('/pallet/{pallet}', [PalletController::class, 'update'])->name('pallet.update');
+    Route::patch('/pallet/{pallet}/status', [PalletController::class, 'updateStatus'])->name('pallet.update-status');
+    Route::get('/pallet/{pallet}/download-qr', [PalletController::class, 'downloadQr'])->name('pallet.download-qr');
     Route::delete('/pallet/{pallet}', [PalletController::class, 'destroy'])->name('pallet.destroy');
 });
 

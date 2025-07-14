@@ -99,27 +99,18 @@
                         </div>
 
                         <div>
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-lg font-semibold">QR-код</h3>
-                                @if($stockPosition->qr_code_path)
-                                <a href="{{ route('stockPosition.download-qr', $stockPosition->id) }}"
-                                    class="inline-flex items-center px-3 py-1.5 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                                <div class="flex items-center">
+                                    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    Скачать QR-код
-                                </a>
-                                @endif
+                                    <div>
+                                        <p class="text-sm font-medium text-blue-700 dark:text-blue-400">QR-код теперь генерируется для поддона</p>
+                                        <p class="text-xs text-blue-600 dark:text-blue-300 mt-1">Для получения QR-кода перейдите на страницу поддона</p>
+                                    </div>
+                                </div>
                             </div>
-                            @if($stockPosition->qr_code_path)
-                            <div class="max-w-xs border border-gray-300 dark:border-gray-600 p-2 rounded">
-                                <img src="{{ Storage::url($stockPosition->qr_code_path) }}"
-                                    alt="QR код для позиции #{{ $stockPosition->id }}"
-                                    class="w-full">
-                            </div>
-                            @else
-                            <p class="text-red-500">QR-код не найден</p>
-                            @endif
+                        </div>
 
                             @if($stockPosition->image_path)
                             <div class="mt-6">

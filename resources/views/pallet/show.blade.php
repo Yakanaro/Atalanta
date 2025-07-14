@@ -42,10 +42,33 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-semibold mb-4">Информация о поддоне</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                             <div class="text-sm text-gray-600 dark:text-gray-400">Номер поддона</div>
                             <div class="text-lg font-semibold">{{ $pallet->number }}</div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Статус</div>
+                            @php
+                            $statusData = $pallet->getStatusWithClass();
+                            @endphp
+                            <div class="mt-2">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusData['class'] }}">
+                                    {{ $statusData['status'] }}
+                                </span>
+                                <form action="{{ route('pallet.update-status', $pallet) }}" method="POST" class="mt-2">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="status" onchange="this.form.submit()"
+                                        class="text-xs bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 px-2 py-1 dark:bg-gray-600 dark:border-gray-500 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full">
+                                        @foreach(\App\Models\Pallet::getAvailableStatuses() as $statusKey => $statusLabel)
+                                        <option value="{{ $statusKey }}" {{ $pallet->status === $statusKey ? 'selected' : '' }}>
+                                            {{ $statusLabel }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                            </div>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                             <div class="text-sm text-gray-600 dark:text-gray-400">Количество позиций</div>
@@ -60,6 +83,40 @@
                             <div class="text-lg font-semibold">{{ $pallet->getTotalQuantity() }} шт</div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- QR-код поддона -->
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+                        <h3 class="text-lg font-semibold">QR-код поддона</h3>
+                        @if($pallet->getQrCodePath())
+                        <a href="{{ route('pallet.download-qr', $pallet) }}"
+                            class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-700 focus:bg-green-700 active:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Скачать QR-код
+                        </a>
+                        @endif
+                    </div>
+                    
+                    @if($pallet->getQrCodePath())
+                    <div class="flex justify-center">
+                        <div class="bg-white p-4 rounded-lg shadow-md">
+                            <img src="{{ $pallet->getQrCodeUrl() }}" alt="QR-код поддона {{ $pallet->number }}" class="w-48 h-48">
+                        </div>
+                    </div>
+                    @else
+                    <div class="text-center py-8">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">QR-код не найден</h3>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">QR-код будет сгенерирован автоматически при создании поддона</p>
+                    </div>
+                    @endif
                 </div>
             </div>
 
@@ -112,15 +169,7 @@
                                         </svg>
                                         Редактировать
                                     </a>
-                                    @if($position->getQrCodePath())
-                                    <a href="{{ route('stockPosition.download-qr', $position) }}"
-                                        class="inline-flex items-center justify-center px-3 py-2 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-200 text-sm font-medium rounded-lg transition-colors duration-200 min-h-[44px]">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                        </svg>
-                                        QR-код
-                                    </a>
-                                    @endif
+
                                 </div>
                             </div>
 
@@ -207,15 +256,7 @@
                                                 </svg>
                                                 Редактировать
                                             </a>
-                                            @if($position->getQrCodePath())
-                                            <a href="{{ route('stockPosition.download-qr', $position) }}"
-                                                class="inline-flex items-center px-2 py-1 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:hover:bg-green-800 text-green-700 dark:text-green-200 text-xs font-medium rounded-md transition-colors duration-200">
-                                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                                </svg>
-                                                QR-код
-                                            </a>
-                                            @endif
+
                                         </div>
                                     </td>
                                 </tr>

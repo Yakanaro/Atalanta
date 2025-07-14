@@ -7,6 +7,7 @@ use App\Models\Pallet;
 use App\Models\PolishType;
 use App\Models\ProductType;
 use App\Models\StockPosition;
+use App\Models\StoneType;
 use App\Exports\PalletsExport;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -34,11 +35,16 @@ class PalletController extends Controller
     {
         $query = Pallet::query()
             ->withCount('stockPositions')
-            ->with('stockPositions.productType', 'stockPositions.polishType');
+            ->with('stockPositions.productType', 'stockPositions.polishType', 'stockPositions.stoneType');
 
         // Фильтрация по номеру поддона
         if ($request->filled('filter_pallet_number')) {
             $query->where('number', 'like', '%' . $request->input('filter_pallet_number') . '%');
+        }
+
+        // Фильтрация по статусу поддона
+        if ($request->filled('filter_status')) {
+            $query->where('status', $request->input('filter_status'));
         }
 
         // Фильтрация по типу продукции
@@ -55,6 +61,13 @@ class PalletController extends Controller
             });
         }
 
+        // Фильтрация по типу камня
+        if ($request->filled('filter_stone_type_id')) {
+            $query->whereHas('stockPositions', function ($q) use ($request) {
+                $q->where('stone_type_id', $request->input('filter_stone_type_id'));
+            });
+        }
+
         $pallets = $query->orderBy('created_at', 'desc')->get();
 
         // Добавляем статистику для каждого поддона
@@ -65,8 +78,10 @@ class PalletController extends Controller
 
         $productTypes = ProductType::getActive();
         $polishTypes = PolishType::getActive();
+        $stoneTypes = StoneType::getActive();
+        $palletStatuses = Pallet::getAvailableStatuses();
 
-        return view('dashboard', compact('pallets', 'productTypes', 'polishTypes'));
+        return view('dashboard', compact('pallets', 'productTypes', 'polishTypes', 'stoneTypes', 'palletStatuses'));
     }
 
     /**
@@ -88,17 +103,17 @@ class PalletController extends Controller
         try {
             DB::beginTransaction();
 
-            // Создаем поддон
+            // Создаем поддон с автоматически сгенерированным номером
             $pallet = Pallet::create([
-                'number' => $request->getPalletNumber(),
+                'number' => Pallet::generateNextNumber(),
             ]);
 
             // Создаем позиции для поддона (если есть)
             $positions = $request->getPositions();
             $positionsCount = count($positions);
-            
+
             foreach ($positions as $positionData) {
-                $stockPosition = StockPosition::create([
+                StockPosition::create([
                     'pallet_id' => $pallet->id,
                     'product_type_id' => $positionData['product_type_id'],
                     'polish_type_id' => $positionData['polish_type_id'],
@@ -108,14 +123,14 @@ class PalletController extends Controller
                     'quantity' => $positionData['quantity'],
                     'weight' => $positionData['weight'],
                 ]);
-
-                // Генерируем QR-код для позиции
-                $this->generateQrCode($stockPosition);
             }
+
+            // Генерируем QR-код для поддона
+            $this->generateQrCode($pallet);
 
             DB::commit();
 
-            $message = $positionsCount > 0 
+            $message = $positionsCount > 0
                 ? 'Поддон успешно создан с ' . $positionsCount . ' позициями.'
                 : 'Поддон успешно создан. Позиции можно добавить позже.';
 
@@ -178,10 +193,8 @@ class PalletController extends Controller
         try {
             DB::beginTransaction();
 
-            // Удаляем QR-коды и изображения связанных позиций
-            foreach ($pallet->stockPositions as $position) {
-                $this->deletePositionFiles($position);
-            }
+            // Удаляем QR-код поддона и изображения связанных позиций
+            $this->deletePalletFiles($pallet);
 
             // Удаляем все позиции поддона
             $pallet->stockPositions()->delete();
@@ -201,12 +214,35 @@ class PalletController extends Controller
     }
 
     /**
-     * Генерация QR-кода для позиции.
+     * Изменение статуса поддона.
      */
-    private function generateQrCode(StockPosition $stockPosition): void
+    public function updateStatus(Request $request, Pallet $pallet): RedirectResponse
     {
-        $qrData = route('stockPosition.show', $stockPosition->id);
-        $fileName = 'qr_code_' . $stockPosition->id . '.svg';
+        $request->validate([
+            'status' => 'required|string|in:' . implode(',', array_keys(Pallet::getAvailableStatuses())),
+        ]);
+
+        try {
+            $oldStatus = $pallet->status;
+            $newStatus = $request->status;
+
+            if ($pallet->changeStatus($newStatus)) {
+                return back()->with('success', 'Статус поддона изменен с "' . $oldStatus . '" на "' . $newStatus . '".');
+            } else {
+                return back()->with('error', 'Не удалось изменить статус поддона.');
+            }
+        } catch (Exception $exception) {
+            return back()->with('error', 'Ошибка при изменении статуса: ' . $exception->getMessage());
+        }
+    }
+
+    /**
+     * Генерация QR-кода для поддона.
+     */
+    private function generateQrCode(Pallet $pallet): void
+    {
+        $qrData = route('pallet.show', $pallet->id);
+        $fileName = 'qr_code_pallet_' . $pallet->id . '.svg';
         $filePath = 'qr_codes/' . $fileName;
 
         if (!Storage::disk('public')->exists('qr_codes')) {
@@ -219,26 +255,48 @@ class PalletController extends Controller
             ->encoding('UTF-8')
             ->generate($qrData, storage_path('app/public/' . $filePath));
 
-        $stockPosition->update(['qr_code_path' => $filePath]);
+        $pallet->update(['qr_code_path' => $filePath]);
     }
 
     /**
-     * Удаление файлов позиции.
+     * Удаление файлов поддона.
      */
-    private function deletePositionFiles(StockPosition $position): void
+    private function deletePalletFiles(Pallet $pallet): void
     {
-        // Удаляем QR-код
-        if ($position->getQrCodePath() && Storage::disk('public')->exists($position->getQrCodePath())) {
-            Storage::disk('public')->delete($position->getQrCodePath());
+        // Удаляем QR-код поддона
+        if ($pallet->getQrCodePath() && Storage::disk('public')->exists($pallet->getQrCodePath())) {
+            Storage::disk('public')->delete($pallet->getQrCodePath());
         }
 
-        // Удаляем изображение
-        if ($position->getImagePath()) {
-            $imagePath = str_replace('/storage/', '', parse_url($position->getImagePath(), PHP_URL_PATH));
-            if (Storage::disk('public')->exists($imagePath)) {
-                Storage::disk('public')->delete($imagePath);
+        // Удаляем файлы позиций
+        foreach ($pallet->stockPositions as $position) {
+            if ($position->getImagePath()) {
+                $imagePath = str_replace('/storage/', '', parse_url($position->getImagePath(), PHP_URL_PATH));
+                if (Storage::disk('public')->exists($imagePath)) {
+                    Storage::disk('public')->delete($imagePath);
+                }
             }
         }
+    }
+
+    /**
+     * Скачивание QR-кода поддона.
+     */
+    public function downloadQr(Pallet $pallet)
+    {
+        if (!$pallet->getQrCodePath()) {
+            return back()->with('error', 'QR-код не найден');
+        }
+
+        $path = storage_path('app/public/' . $pallet->getQrCodePath());
+
+        if (!file_exists($path)) {
+            return back()->with('error', 'Файл QR-кода не найден');
+        }
+
+        $fileName = 'qr_code_pallet_' . $pallet->number . '.svg';
+
+        return response()->download($path, $fileName);
     }
 
     /**

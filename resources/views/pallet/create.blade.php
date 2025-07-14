@@ -147,10 +147,15 @@
                     <!-- Информация о поддоне -->
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Информация о поддоне</h3>
-                        <div class="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
-                            <div>
-                                <label for="pallet_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Номер поддона</label>
-                                <input type="text" id="pallet_number" name="pallet_number" value="{{ old('pallet_number') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Введите номер поддона" required />
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <p class="text-sm text-blue-700 dark:text-blue-400">
+                                    <span class="font-medium">Номер поддона будет сгенерирован автоматически</span><br>
+                                    Система автоматически присвоит следующий доступный номер в формате P-XXX
+                                </p>
                             </div>
                         </div>
                     </div>
