@@ -4,6 +4,7 @@
   "description": "Система управления поддонами и складскими позициями",
   "start_url": "/",
   "display": "standalone",
+  "prefer_related_applications": false,
   "theme_color": "#1f2937",
   "background_color": "#f9fafb",
   "orientation": "portrait",
@@ -12,21 +13,21 @@
   "dir": "ltr",
   "icons": [
     {
-      "src": "/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
       "src": "/favicon.ico",
       "sizes": "48x48",
       "type": "image/x-icon",
-      "purpose": "any"
-    },
-    {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
       "purpose": "any"
     }
   ],
