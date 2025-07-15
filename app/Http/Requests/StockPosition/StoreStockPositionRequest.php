@@ -21,6 +21,7 @@ class StoreStockPositionRequest extends FormRequest
             'thickness' => 'required',
             'quantity' => 'required',
             'polish_type_id' => 'nullable|exists:polish_types,id',
+            'stone_type_id' => 'nullable|exists:stone_types,id',
             'pallet_id' => 'nullable|exists:pallets,id',
             'pallet_number' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -55,6 +56,11 @@ class StoreStockPositionRequest extends FormRequest
     public function getPolishTypeId(): ?int
     {
         return $this->validated('polish_type_id') ? (int)$this->validated('polish_type_id') : null;
+    }
+
+    public function getStoneTypeId(): ?int
+    {
+        return $this->validated('stone_type_id') ? (int)$this->validated('stone_type_id') : null;
     }
 
     /**
@@ -103,6 +109,7 @@ class StoreStockPositionRequest extends FormRequest
             'thickness' => $this->getThickness(),
             'quantity' => $this->getQuantity(),
             'polish_type_id' => $this->getPolishTypeId(),
+            'stone_type_id' => $this->getStoneTypeId(),
             'pallet_id' => $this->getPalletId(),
             'weight' => $this->calculateWeight(),
         ];
@@ -112,6 +119,6 @@ class StoreStockPositionRequest extends FormRequest
 
     private function calculateWeight(): float
     {
-        return round($this->getLength() * $this->getWidth() * $this->getThickness() * 0.0032, 2);
+        return round($this->getLength() * $this->getWidth() * $this->getThickness() * $this->getQuantity() * 0.0032, 2);
     }
 }

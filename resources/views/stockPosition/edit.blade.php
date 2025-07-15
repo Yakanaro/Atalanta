@@ -118,10 +118,6 @@
                                     <option value="{{ $id }}" {{ $stockPosition->pallet_id == $id ? 'selected' : '' }}>{{ $number }}</option>
                                     @endforeach
                                 </select>
-                                <div class="mt-2">
-                                    <label for="pallet_number" class="block mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">Или введите новый номер поддона</label>
-                                    <input type="text" id="pallet_number" name="pallet_number" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Введите номер нового поддона" />
-                                </div>
                             </div>
                             <div>
                                 <label for="product_type_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Вид продукции</label>
@@ -179,6 +175,15 @@
                                     <option value="">Выберите вид полировки</option>
                                     @foreach($polishTypes as $key => $value)
                                     <option value="{{ $key }}" {{ $stockPosition->polish_type_id == $key ? 'selected' : '' }}>{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="stone_type_id" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Вид камня</label>
+                                <select id="stone_type_id" name="stone_type_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Выберите вид камня</option>
+                                    @foreach($stoneTypes as $key => $value)
+                                    <option value="{{ $key }}" {{ $stockPosition->stone_type_id == $key ? 'selected' : '' }}>{{ $value }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -260,27 +265,7 @@
                 width: '100%'
             });
 
-            // Логика переключения между выбором поддона и вводом нового номера
-            $('#pallet_id').on('change', function() {
-                if ($(this).val()) {
-                    $('#pallet_number').val('').prop('disabled', true);
-                } else {
-                    $('#pallet_number').prop('disabled', false);
-                }
-            });
 
-            $('#pallet_number').on('input', function() {
-                if ($(this).val()) {
-                    $('#pallet_id').val(null).trigger('change.select2').prop('disabled', true);
-                } else {
-                    $('#pallet_id').prop('disabled', false);
-                }
-            });
-
-            // Инициализация состояния при загрузке страницы
-            if ($('#pallet_id').val()) {
-                $('#pallet_number').prop('disabled', true);
-            }
 
             // Обработка изменения размера окна для корректной работы Select2
             $(window).resize(function() {

@@ -131,6 +131,14 @@ class StockPosition extends Model
         return $this->productType?->name;
     }
 
+    /**
+     * Получить название вида камня.
+     */
+    public function getStoneType(): ?string
+    {
+        return $this->stoneType?->name;
+    }
+
     public function getQrCodePath(): ?string
     {
         return $this->qr_code_path;

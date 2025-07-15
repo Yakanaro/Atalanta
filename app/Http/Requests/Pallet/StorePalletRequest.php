@@ -54,15 +54,16 @@ class StorePalletRequest extends FormRequest
             $position['weight'] = $this->calculateWeight(
                 $position['length'],
                 $position['width'],
-                $position['thickness']
+                $position['thickness'],
+                $position['quantity']
             );
         }
 
         return $positions;
     }
 
-    private function calculateWeight(float $length, float $width, float $thickness): float
+    private function calculateWeight(float $length, float $width, float $thickness, int $quantity): float
     {
-        return round($length * $width * $thickness * 0.0032, 2);
+        return round($length * $width * $thickness * $quantity * 0.0032, 2);
     }
 }

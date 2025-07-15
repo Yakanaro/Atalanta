@@ -5,6 +5,7 @@
                 {{ __('Информация о позиции #') }}{{ $stockPosition->id }}
             </h2>
             <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+                @auth
                 <a href="{{ route('stockPosition.edit', $stockPosition->id) }}"
                     class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -25,6 +26,14 @@
                     class="inline-flex items-center justify-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
                     Назад
                 </a>
+                @else
+                @if($stockPosition->pallet_id)
+                <a href="{{ route('pallet.show', $stockPosition->pallet_id) }}"
+                    class="inline-flex items-center justify-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    К поддону
+                </a>
+                @endif
+                @endauth
             </div>
         </div>
     </x-slot>
@@ -91,6 +100,11 @@
                                 <dd>{{ $stockPosition->getPolishType() }}</dd>
                                 @endif
 
+                                @if($stockPosition->stoneType)
+                                <dt class="font-medium">Вид камня:</dt>
+                                <dd>{{ $stockPosition->getStoneType() }}</dd>
+                                @endif
+
                                 @if($stockPosition->pallet_number)
                                 <dt class="font-medium">Номер поддона:</dt>
                                 <dd>{{ $stockPosition->pallet_number }}</dd>
@@ -130,6 +144,7 @@
     </div>
 
     <!-- Модальное окно подтверждения удаления -->
+    @auth
     <div id="deleteModal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-md max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -157,4 +172,5 @@
             </div>
         </div>
     </div>
+    @endauth
 </x-app-layout>

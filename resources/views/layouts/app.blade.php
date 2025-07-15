@@ -66,26 +66,35 @@
             var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
             var themeToggleBtn = document.getElementById('theme-toggle');
 
-            // Элементы для мобильного переключателя
+            // Элементы для мобильного переключателя (авторизованные пользователи)
             var themeToggleDarkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
             var themeToggleLightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
             var themeToggleBtnMobile = document.getElementById('theme-toggle-mobile');
+
+            // Элементы для мобильного переключателя (неавторизованные пользователи)
+            var themeToggleDarkIconMobileGuest = document.getElementById('theme-toggle-dark-icon-mobile-guest');
+            var themeToggleLightIconMobileGuest = document.getElementById('theme-toggle-light-icon-mobile-guest');
+            var themeToggleBtnMobileGuest = document.getElementById('theme-toggle-mobile-guest');
 
             // Функция для установки правильных иконок
             function setCorrectIcons() {
                 if (localStorage.getItem('color-theme') === 'dark' ||
                     (!('color-theme' in localStorage) && document.documentElement.classList.contains('dark'))) {
                     // Показываем иконку солнца (светлая тема)
-                    themeToggleLightIcon.classList.remove('hidden');
-                    themeToggleDarkIcon.classList.add('hidden');
-                    themeToggleLightIconMobile.classList.remove('hidden');
-                    themeToggleDarkIconMobile.classList.add('hidden');
+                    if (themeToggleLightIcon) themeToggleLightIcon.classList.remove('hidden');
+                    if (themeToggleDarkIcon) themeToggleDarkIcon.classList.add('hidden');
+                    if (themeToggleLightIconMobile) themeToggleLightIconMobile.classList.remove('hidden');
+                    if (themeToggleDarkIconMobile) themeToggleDarkIconMobile.classList.add('hidden');
+                    if (themeToggleLightIconMobileGuest) themeToggleLightIconMobileGuest.classList.remove('hidden');
+                    if (themeToggleDarkIconMobileGuest) themeToggleDarkIconMobileGuest.classList.add('hidden');
                 } else {
                     // Показываем иконку луны (темная тема)
-                    themeToggleDarkIcon.classList.remove('hidden');
-                    themeToggleLightIcon.classList.add('hidden');
-                    themeToggleDarkIconMobile.classList.remove('hidden');
-                    themeToggleLightIconMobile.classList.add('hidden');
+                    if (themeToggleDarkIcon) themeToggleDarkIcon.classList.remove('hidden');
+                    if (themeToggleLightIcon) themeToggleLightIcon.classList.add('hidden');
+                    if (themeToggleDarkIconMobile) themeToggleDarkIconMobile.classList.remove('hidden');
+                    if (themeToggleLightIconMobile) themeToggleLightIconMobile.classList.add('hidden');
+                    if (themeToggleDarkIconMobileGuest) themeToggleDarkIconMobileGuest.classList.remove('hidden');
+                    if (themeToggleLightIconMobileGuest) themeToggleLightIconMobileGuest.classList.add('hidden');
                 }
             }
 
@@ -115,6 +124,10 @@
 
             if (themeToggleBtnMobile) {
                 themeToggleBtnMobile.addEventListener('click', toggleTheme);
+            }
+
+            if (themeToggleBtnMobileGuest) {
+                themeToggleBtnMobileGuest.addEventListener('click', toggleTheme);
             }
         });
     </script>

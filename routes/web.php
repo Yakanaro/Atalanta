@@ -32,23 +32,28 @@ Route::middleware('auth')->group(function () {
     Route::delete('/settings/stone-types/{stoneType}', [SettingsController::class, 'deleteStoneType'])->name('settings.stone-types.delete');
 });
 
-// Маршруты для позиций
-Route::get('/stock-position/create', [StockPositionController::class, 'create'])->name('stockPosition.create');
-Route::post('/stock-position/store', [StockPositionController::class, 'store'])->name('stockPosition.store');
+// Маршруты для позиций, требующие авторизации (должны быть ПЕРЕД параметрическими маршрутами)
+Route::middleware('auth')->group(function () {
+    Route::get('/stock-position/create', [StockPositionController::class, 'create'])->name('stockPosition.create');
+    Route::post('/stock-position/store', [StockPositionController::class, 'store'])->name('stockPosition.store');
+    Route::get('/stock-position/{stockPosition}/edit', [StockPositionController::class, 'edit'])->name('stockPosition.edit');
+    Route::put('/stock-position/{stockPosition}', [StockPositionController::class, 'update'])->name('stockPosition.update');
+    Route::delete('/stock-position/{stockPosition}', [StockPositionController::class, 'destroy'])->name('stockPosition.destroy');
+    Route::get('/stock-positions/export', [StockPositionController::class, 'export'])->name('stockPosition.export');
+});
+
+// Публичные маршруты для позиций (доступны по ссылкам)
 Route::get('/stock-position/{stockPosition}', [StockPositionController::class, 'show'])->name('stockPosition.show');
-Route::get('/stock-position/{stockPosition}/edit', [StockPositionController::class, 'edit'])->name('stockPosition.edit');
-Route::put('/stock-position/{stockPosition}', [StockPositionController::class, 'update'])->name('stockPosition.update');
-Route::delete('/stock-position/{stockPosition}', [StockPositionController::class, 'destroy'])->name('stockPosition.destroy');
 
-Route::get('/stock-positions/export', [StockPositionController::class, 'export'])->name('stockPosition.export');
+// Публичные маршруты для поддонов (доступны по QR-коду)
+Route::get('/pallet/{pallet}', [PalletController::class, 'show'])->name('pallet.show');
 
-// Маршруты для поддонов
+// Маршруты для поддонов, требующие авторизации
 Route::middleware('auth')->group(function () {
     Route::get('/pallet', [PalletController::class, 'index'])->name('pallet.index');
     Route::get('/pallet/create', [PalletController::class, 'create'])->name('pallet.create');
     Route::get('/pallet/export', [PalletController::class, 'export'])->name('pallet.export');
     Route::post('/pallet', [PalletController::class, 'store'])->name('pallet.store');
-    Route::get('/pallet/{pallet}', [PalletController::class, 'show'])->name('pallet.show');
     Route::get('/pallet/{pallet}/edit', [PalletController::class, 'edit'])->name('pallet.edit');
     Route::put('/pallet/{pallet}', [PalletController::class, 'update'])->name('pallet.update');
     Route::patch('/pallet/{pallet}/status', [PalletController::class, 'updateStatus'])->name('pallet.update-status');
