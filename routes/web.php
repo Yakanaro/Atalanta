@@ -45,10 +45,7 @@ Route::middleware('auth')->group(function () {
 // Публичные маршруты для позиций (доступны по ссылкам)
 Route::get('/stock-position/{stockPosition}', [StockPositionController::class, 'show'])->name('stockPosition.show');
 
-// Публичные маршруты для поддонов (доступны по QR-коду)
-Route::get('/pallet/{pallet}', [PalletController::class, 'show'])->name('pallet.show');
-
-// Маршруты для поддонов, требующие авторизации
+// Маршруты для поддонов, требующие авторизации (должны быть ПЕРЕД параметрическими маршрутами)
 Route::middleware('auth')->group(function () {
     Route::get('/pallet', [PalletController::class, 'index'])->name('pallet.index');
     Route::get('/pallet/create', [PalletController::class, 'create'])->name('pallet.create');
@@ -60,5 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/pallet/{pallet}/download-qr', [PalletController::class, 'downloadQr'])->name('pallet.download-qr');
     Route::delete('/pallet/{pallet}', [PalletController::class, 'destroy'])->name('pallet.destroy');
 });
+
+// Публичные маршруты для поддонов (доступны по QR-коду)
+Route::get('/pallet/{pallet}', [PalletController::class, 'show'])->name('pallet.show');
 
 require __DIR__ . '/auth.php';
