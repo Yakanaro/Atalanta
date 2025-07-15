@@ -242,20 +242,132 @@ class PalletController extends Controller
     private function generateQrCode(Pallet $pallet): void
     {
         $qrData = route('pallet.show', $pallet->id);
-        $fileName = 'qr_code_pallet_' . $pallet->id . '.svg';
+        $fileName = 'qr_code_pallet_' . $pallet->id . '.png';
         $filePath = 'qr_codes/' . $fileName;
 
         if (!Storage::disk('public')->exists('qr_codes')) {
             Storage::disk('public')->makeDirectory('qr_codes');
         }
 
-        QrCode::format('svg')
+        // Генерируем PNG QR-код с использованием imagick
+        $qrCodeImage = QrCode::format('png')
             ->size(200)
-            ->margin(1)
+            ->margin(10)
             ->encoding('UTF-8')
-            ->generate($qrData, storage_path('app/public/' . $filePath));
+            ->generate($qrData);
+
+        // Добавляем текст к PNG изображению
+        $modifiedImage = $this->addTextToPngQr($qrCodeImage, $pallet->number);
+
+        // Сохраняем PNG
+        Storage::disk('public')->put($filePath, $modifiedImage);
 
         $pallet->update(['qr_code_path' => $filePath]);
+    }
+
+    /**
+     * Добавляет текст в PNG QR-код.
+     */
+    private function addTextToPngQr(string $qrCodeImage, string $text): string
+    {
+        // Создаем изображение из строки QR-кода
+        $qrImage = imagecreatefromstring($qrCodeImage);
+        
+        if (!$qrImage) {
+            return $qrCodeImage;
+        }
+        
+        // Получаем размеры QR-кода
+        $qrWidth = imagesx($qrImage);
+        $qrHeight = imagesy($qrImage);
+        
+        // Настройки для текста
+        $textPadding = 10;
+        $textHeight = 30;
+        
+        // Создаем новое изображение с дополнительным местом для текста
+        $newHeight = $qrHeight + $textHeight + $textPadding;
+        $newImage = imagecreatetruecolor($qrWidth, $newHeight);
+        
+        // Заполняем фон белым цветом
+        $white = imagecolorallocate($newImage, 255, 255, 255);
+        $black = imagecolorallocate($newImage, 0, 0, 0);
+        imagefill($newImage, 0, 0, $white);
+        
+        // Копируем QR-код в новое изображение
+        imagecopy($newImage, $qrImage, 0, 0, 0, 0, $qrWidth, $qrHeight);
+        
+        // Добавляем текст
+        $textX = $qrWidth / 2;
+        $textY = $qrHeight + $textPadding + 18;
+        
+        // Используем встроенный шрифт размером 5 (самый большой)
+        $fontSize = 5;
+        $textWidth = strlen($text) * imagefontwidth($fontSize);
+        $textX = ($qrWidth - $textWidth) / 2;
+        
+        imagestring($newImage, $fontSize, $textX, $textY - 10, $text, $black);
+        
+        // Сохраняем изображение в буфер
+        ob_start();
+        imagepng($newImage);
+        $imageData = ob_get_contents();
+        ob_end_clean();
+        
+        // Освобождаем память
+        imagedestroy($qrImage);
+        imagedestroy($newImage);
+        
+        return $imageData;
+    }
+
+    /**
+     * Добавляет текст в SVG QR-код.
+     */
+    private function addTextToSvg(string $svgContent, string $text): string
+    {
+        // Парсим SVG для получения размеров
+        $dom = new \DOMDocument();
+        $dom->loadXML($svgContent);
+        $svgElement = $dom->getElementsByTagName('svg')->item(0);
+
+        if (!$svgElement) {
+            return $svgContent;
+        }
+
+        // Получаем текущие размеры SVG
+        $width = (float) $svgElement->getAttribute('width');
+        $height = (float) $svgElement->getAttribute('height');
+
+        // Если размеры не указаны, используем значения по умолчанию
+        if (!$width || !$height) {
+            $width = 200;
+            $height = 200;
+        }
+
+        // Увеличиваем высоту для текста
+        $textHeight = 25;
+        $newHeight = $height + $textHeight;
+
+        // Обновляем размеры SVG
+        $svgElement->setAttribute('height', $newHeight);
+        $svgElement->setAttribute('viewBox', "0 0 $width $newHeight");
+
+        // Создаем текстовый элемент
+        $textElement = $dom->createElement('text');
+        $textElement->setAttribute('x', $width / 2);
+        $textElement->setAttribute('y', $height + 18);
+        $textElement->setAttribute('text-anchor', 'middle');
+        $textElement->setAttribute('font-family', 'Arial, sans-serif');
+        $textElement->setAttribute('font-size', '18');
+        $textElement->setAttribute('font-weight', 'bold');
+        $textElement->setAttribute('fill', 'black');
+        $textElement->nodeValue = $text;
+
+        // Добавляем текст в SVG
+        $svgElement->appendChild($textElement);
+
+        return $dom->saveXML();
     }
 
     /**
@@ -294,7 +406,7 @@ class PalletController extends Controller
             return back()->with('error', 'Файл QR-кода не найден');
         }
 
-        $fileName = 'qr_code_pallet_' . $pallet->number . '.svg';
+        $fileName = 'qr_code_pallet_' . $pallet->number . '.png';
 
         return response()->download($path, $fileName);
     }

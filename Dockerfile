@@ -22,6 +22,7 @@ RUN apt-get update --allow-releaseinfo-change && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
+    libmagickwand-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
@@ -50,6 +51,9 @@ RUN docker-php-ext-install \
     gd \
     zip \
     xml
+
+# Установка ImageMagick расширения
+RUN pecl install imagick && docker-php-ext-enable imagick
 
 # Установка Redis расширения
 RUN pecl install redis && docker-php-ext-enable redis
