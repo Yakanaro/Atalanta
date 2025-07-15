@@ -279,7 +279,7 @@ class PalletController extends Controller
         $height = (float) $svgElement->getAttribute('height');
 
         // Увеличиваем высоту для текста
-        $newHeight = $height + 35;
+        $newHeight = $height + 40;
         $svgElement->setAttribute('height', $newHeight);
         $svgElement->setAttribute('viewBox', '0 0 ' . $width . ' ' . $newHeight);
 
@@ -288,14 +288,14 @@ class PalletController extends Controller
         $bgRect->setAttribute('x', '0');
         $bgRect->setAttribute('y', $height);
         $bgRect->setAttribute('width', $width);
-        $bgRect->setAttribute('height', '35');
+        $bgRect->setAttribute('height', '40');
         $bgRect->setAttribute('fill', 'white');
         $svgElement->appendChild($bgRect);
 
         // Создаем элемент текста
         $textElement = $dom->createElement('text');
         $textElement->setAttribute('x', $width / 2);
-        $textElement->setAttribute('y', $height + 22);
+        $textElement->setAttribute('y', $height + 32);
         $textElement->setAttribute('text-anchor', 'middle');
         $textElement->setAttribute('font-family', 'Arial, sans-serif');
         $textElement->setAttribute('font-size', '28');
