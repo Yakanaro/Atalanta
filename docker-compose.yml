@@ -20,7 +20,7 @@ services:
       - DB_PASSWORD=password
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - QUEUE_CONNECTION=redis
+      - QUEUE_CONNECTION=sync
       - CACHE_DRIVER=redis
       - SESSION_DRIVER=redis
     depends_on:
@@ -73,33 +73,33 @@ services:
     networks:
       - atalanta-network
 
-  queue:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: atalanta-queue
-    restart: unless-stopped
-    command: php artisan queue:work --tries=3 --timeout=60
-    working_dir: /var/www
-    volumes:
-      - ./.env:/var/www/.env
-      - ./storage:/var/www/storage
-    environment:
-      - APP_ENV=production
-      - APP_DEBUG=false
-      - DB_HOST=mysql
-      - DB_DATABASE=atalanta
-      - DB_USERNAME=atalanta
-      - DB_PASSWORD=password
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - QUEUE_CONNECTION=redis
-    depends_on:
-      - mysql
-      - redis
-      - app
-    networks:
-      - atalanta-network
+  # queue:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: atalanta-queue
+  #   restart: unless-stopped
+  #   command: php artisan queue:work --tries=3 --timeout=60
+  #   working_dir: /var/www
+  #   volumes:
+  #     - ./.env:/var/www/.env
+  #     - ./storage:/var/www/storage
+  #   environment:
+  #     - APP_ENV=production
+  #     - APP_DEBUG=false
+  #     - DB_HOST=mysql
+  #     - DB_DATABASE=atalanta
+  #     - DB_USERNAME=atalanta
+  #     - DB_PASSWORD=password
+  #     - REDIS_HOST=redis
+  #     - REDIS_PORT=6379
+  #     - QUEUE_CONNECTION=redis
+  #   depends_on:
+  #     - mysql
+  #     - redis
+  #     - app
+  #   networks:
+  #     - atalanta-network
 
   scheduler:
     build:
