@@ -61,14 +61,14 @@
                         <!-- Изображение поддона -->
                         <div class="mb-6">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Изображение поддона</label>
-                            
+
                             @if($pallet->getImagePath())
-                                <div class="mb-4 text-center">
-                                    <img src="{{ $pallet->getImageUrl() }}" alt="Текущее изображение поддона" class="max-w-xs max-h-48 rounded-lg border border-gray-300 dark:border-gray-600 mx-auto">
-                                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Текущее изображение</p>
-                                </div>
+                            <div class="mb-4 text-center">
+                                <img src="{{ $pallet->getImageUrl() }}" alt="Текущее изображение поддона" class="max-w-xs max-h-48 rounded-lg border border-gray-300 dark:border-gray-600 mx-auto">
+                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Текущее изображение</p>
+                            </div>
                             @endif
-                            
+
                             <div class="flex items-center justify-center w-full">
                                 <label for="image" class="flex flex-col items-center justify-center w-full h-48 sm:h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                                     <div class="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center">
@@ -76,12 +76,12 @@
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                                         </svg>
                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Нажмите чтобы загрузить</span> или перетащите файл</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF, SVG до 10MB (необязательно)</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF, SVG, HEIC до 10MB (необязательно)</p>
                                     </div>
                                     <input id="image" name="image" type="file" class="hidden" accept="image/*" onchange="previewImage(event)" />
                                 </label>
                             </div>
-                            
+
                             <!-- Предварительный просмотр изображения -->
                             <div id="imagePreview" class="mt-4 hidden">
                                 <img id="previewImg" src="" alt="Предварительный просмотр" class="max-w-xs max-h-48 rounded-lg border border-gray-300 dark:border-gray-600 mx-auto">
@@ -127,7 +127,7 @@
             const file = event.target.files[0];
             const previewContainer = document.getElementById('imagePreview');
             const previewImg = document.getElementById('previewImg');
-            
+
             if (file) {
                 // Проверяем размер файла (10MB = 10 * 1024 * 1024 bytes)
                 const maxSize = 10 * 1024 * 1024;
@@ -136,15 +136,15 @@
                     event.target.value = '';
                     return;
                 }
-                
+
                 // Проверяем тип файла
-                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml'];
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml', 'image/heic', 'image/heif'];
                 if (!allowedTypes.includes(file.type)) {
-                    alert('Неподдерживаемый формат файла. Разрешены только: JPEG, PNG, JPG, GIF, SVG.');
+                    alert('Неподдерживаемый формат файла. Разрешены только: JPEG, PNG, JPG, GIF, SVG, HEIC, HEIF.');
                     event.target.value = '';
                     return;
                 }
-                
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewImg.src = e.target.result;
@@ -193,7 +193,9 @@
                 const dt = e.dataTransfer;
                 const files = dt.files;
                 fileInput.files = files;
-                previewImage({ target: fileInput });
+                previewImage({
+                    target: fileInput
+                });
             }
         });
     </script>

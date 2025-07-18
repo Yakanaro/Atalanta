@@ -21,7 +21,7 @@ class StorePalletRequest extends FormRequest
             'positions.*.thickness' => 'required|numeric|min:0',
             'positions.*.quantity' => 'required|integer|min:1',
             'positions.*.polish_type_id' => 'nullable|exists:polish_types,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,heic,heif|max:10240',
         ];
     }
 
@@ -44,7 +44,7 @@ class StorePalletRequest extends FormRequest
             'positions.*.quantity.min' => 'Количество должно быть больше 0.',
             'positions.*.polish_type_id.exists' => 'Выбранный вид полировки не существует.',
             'image.image' => 'Файл должен быть изображением.',
-            'image.mimes' => 'Изображение должно быть в одном из следующих форматов: jpeg, png, jpg, gif, svg.',
+            'image.mimes' => 'Изображение должно быть в одном из следующих форматов: jpeg, png, jpg, gif, svg, heic, heif.',
             'image.max' => 'Размер изображения не должен превышать 10MB.',
             'image.uploaded' => 'Ошибка загрузки изображения. Проверьте размер файла и попробуйте еще раз.',
         ];
