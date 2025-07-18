@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Pallet\StorePalletRequest;
+use App\Http\Requests\Pallet\UpdatePalletRequest;
 use App\Models\Pallet;
 use App\Models\PolishType;
 use App\Models\ProductType;
@@ -108,6 +109,22 @@ class PalletController extends Controller
                 'number' => Pallet::generateNextNumber(),
             ]);
 
+            // Обрабатываем загрузку изображения
+            if ($request->hasImage()) {
+                $image = $request->getImage();
+
+                if (!Storage::disk('public')->exists('pallet_images')) {
+                    Storage::disk('public')->makeDirectory('pallet_images');
+                }
+
+                $path = Storage::disk('public')->put('pallet_images', $image);
+                $url = Storage::url($path);
+
+                $pallet->update([
+                    'image_path' => $url
+                ]);
+            }
+
             // Создаем позиции для поддона (если есть)
             $positions = $request->getPositions();
             $positionsCount = count($positions);
@@ -166,16 +183,36 @@ class PalletController extends Controller
     /**
      * Обновление поддона.
      */
-    public function update(Request $request, Pallet $pallet): RedirectResponse
+    public function update(UpdatePalletRequest $request, Pallet $pallet): RedirectResponse
     {
-        $request->validate([
-            'number' => 'required|string|max:255|unique:pallets,number,' . $pallet->id,
-        ]);
-
         try {
-            $pallet->update([
-                'number' => $request->number,
-            ]);
+            $updateData = [
+                'number' => $request->getNumber(),
+            ];
+
+            // Обрабатываем загрузку изображения
+            if ($request->hasImage()) {
+                // Удаляем старое изображение, если оно есть
+                if ($pallet->getImagePath()) {
+                    $oldPath = str_replace('/storage/', '', parse_url($pallet->getImagePath(), PHP_URL_PATH));
+                    if (Storage::disk('public')->exists($oldPath)) {
+                        Storage::disk('public')->delete($oldPath);
+                    }
+                }
+
+                $image = $request->getImage();
+
+                if (!Storage::disk('public')->exists('pallet_images')) {
+                    Storage::disk('public')->makeDirectory('pallet_images');
+                }
+
+                $path = Storage::disk('public')->put('pallet_images', $image);
+                $url = Storage::url($path);
+
+                $updateData['image_path'] = $url;
+            }
+
+            $pallet->update($updateData);
 
             return redirect()
                 ->route('pallet.show', $pallet)
@@ -317,6 +354,14 @@ class PalletController extends Controller
         // Удаляем QR-код поддона
         if ($pallet->getQrCodePath() && Storage::disk('public')->exists($pallet->getQrCodePath())) {
             Storage::disk('public')->delete($pallet->getQrCodePath());
+        }
+
+        // Удаляем изображение поддона
+        if ($pallet->getImagePath()) {
+            $imagePath = str_replace('/storage/', '', parse_url($pallet->getImagePath(), PHP_URL_PATH));
+            if (Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
+            }
         }
 
         // Удаляем файлы позиций

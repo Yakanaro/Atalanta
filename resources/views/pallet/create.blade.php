@@ -127,7 +127,7 @@
             </div>
             @endif
 
-                                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <div class="p-4 sm:p-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
                     <div>
                         <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Создание поддона</h2>
@@ -141,13 +141,13 @@
                     </a>
                 </div>
 
-                <form action="{{ route('pallet.store') }}" method="POST" class="p-4 sm:p-6">
+                <form action="{{ route('pallet.store') }}" method="POST" enctype="multipart/form-data" class="p-4 sm:p-6">
                     @csrf
 
                     <!-- Информация о поддоне -->
                     <div class="mb-6">
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Информация о поддоне</h3>
-                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
                             <div class="flex items-center">
                                 <svg class="w-5 h-5 text-blue-600 dark:text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -156,6 +156,28 @@
                                     <span class="font-medium">Номер поддона будет сгенерирован автоматически</span><br>
                                     Система автоматически присвоит следующий доступный номер в формате P-XXX
                                 </p>
+                            </div>
+                        </div>
+
+                        <!-- Изображение поддона -->
+                        <div class="mb-6">
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Изображение поддона</label>
+                            <div class="flex items-center justify-center w-full">
+                                <label for="image" class="flex flex-col items-center justify-center w-full h-48 sm:h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                                    <div class="flex flex-col items-center justify-center pt-5 pb-6 px-4 text-center">
+                                        <svg class="w-8 h-8 mb-3 sm:mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                        </svg>
+                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Нажмите чтобы загрузить</span> или перетащите файл</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF, SVG до 2MB</p>
+                                    </div>
+                                    <input id="image" name="image" type="file" class="hidden" accept="image/*" onchange="previewImage(event)" />
+                                </label>
+                            </div>
+
+                            <!-- Предварительный просмотр изображения -->
+                            <div id="imagePreview" class="mt-4 hidden">
+                                <img id="previewImg" src="" alt="Предварительный просмотр" class="max-w-xs max-h-48 rounded-lg border border-gray-300 dark:border-gray-600 mx-auto">
                             </div>
                         </div>
                     </div>
@@ -301,13 +323,73 @@
         function updateEmptyMessage() {
             const positions = document.querySelectorAll('.position-item');
             const emptyMessage = document.getElementById('empty-positions-message');
-            
+
             if (positions.length === 0) {
                 emptyMessage.style.display = 'block';
             } else {
                 emptyMessage.style.display = 'none';
             }
         }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const previewContainer = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.classList.add('hidden');
+                previewImg.src = '';
+            }
+        }
+
+        // Drag and drop functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.querySelector('label[for="image"]');
+            const fileInput = document.getElementById('image');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight(e) {
+                dropZone.classList.add('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+            }
+
+            function unhighlight(e) {
+                dropZone.classList.remove('border-blue-500', 'bg-blue-50', 'dark:bg-blue-900/20');
+            }
+
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                fileInput.files = files;
+                previewImage({
+                    target: fileInput
+                });
+            }
+        });
     </script>
     @endpush
 </x-app-layout>

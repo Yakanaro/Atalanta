@@ -21,6 +21,7 @@ class StorePalletRequest extends FormRequest
             'positions.*.thickness' => 'required|numeric|min:0',
             'positions.*.quantity' => 'required|integer|min:1',
             'positions.*.polish_type_id' => 'nullable|exists:polish_types,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 
@@ -65,5 +66,21 @@ class StorePalletRequest extends FormRequest
     private function calculateWeight(float $length, float $width, float $thickness, int $quantity): float
     {
         return round($length * $width * $thickness * $quantity * 0.0032, 2);
+    }
+
+    /**
+     * Проверить, есть ли изображение.
+     */
+    public function hasImage(): bool
+    {
+        return $this->hasFile('image');
+    }
+
+    /**
+     * Получить изображение.
+     */
+    public function getImage()
+    {
+        return $this->file('image');
     }
 }

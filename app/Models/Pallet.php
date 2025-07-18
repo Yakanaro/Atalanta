@@ -39,6 +39,7 @@ class Pallet extends Model
         'number',
         'status',
         'qr_code_path',
+        'image_path',
     ];
 
     /**
@@ -247,5 +248,21 @@ class Pallet extends Model
     public function getQrCodeUrl(): ?string
     {
         return $this->qr_code_path ? asset('storage/' . $this->qr_code_path) : null;
+    }
+
+    /**
+     * Получить путь к изображению поддона.
+     */
+    public function getImagePath(): ?string
+    {
+        return $this->image_path;
+    }
+
+    /**
+     * Получить URL изображения поддона.
+     */
+    public function getImageUrl(): ?string
+    {
+        return $this->image_path ? asset($this->image_path) : null;
     }
 }

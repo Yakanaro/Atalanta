@@ -90,6 +90,19 @@
                 </div>
             </div>
 
+            <!-- Изображение поддона -->
+            @if($pallet->getImagePath())
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h3 class="text-lg font-semibold mb-4">Изображение поддона</h3>
+                    <div class="flex justify-center">
+                        <img src="{{ $pallet->getImageUrl() }}" alt="Изображение поддона {{ $pallet->number }}" 
+                             class="max-w-full max-h-96 rounded-lg border border-gray-300 dark:border-gray-600 shadow-md">
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <!-- QR-код поддона -->
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
