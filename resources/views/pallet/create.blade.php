@@ -331,11 +331,11 @@
             }
         }
 
-                function previewImage(event) {
+        function previewImage(event) {
             const file = event.target.files[0];
             const previewContainer = document.getElementById('imagePreview');
             const previewImg = document.getElementById('previewImg');
-            
+
             if (file) {
                 // Проверяем размер файла (10MB = 10 * 1024 * 1024 bytes)
                 const maxSize = 10 * 1024 * 1024;
@@ -344,7 +344,7 @@
                     event.target.value = '';
                     return;
                 }
-                
+
                 // Проверяем тип файла
                 const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml', 'image/heic', 'image/heif'];
                 if (!allowedTypes.includes(file.type)) {
@@ -352,7 +352,7 @@
                     event.target.value = '';
                     return;
                 }
-                
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewImg.src = e.target.result;

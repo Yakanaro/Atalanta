@@ -15,7 +15,7 @@ class UpdatePalletRequest extends FormRequest
     {
         return [
             'number' => 'required|string|max:255|unique:pallets,number,' . $this->route('pallet')->id,
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,heic,heif|max:10240',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,heic,heif|max:51200',
         ];
     }
 
@@ -26,7 +26,7 @@ class UpdatePalletRequest extends FormRequest
             'number.unique' => 'Поддон с таким номером уже существует.',
             'image.image' => 'Файл должен быть изображением.',
             'image.mimes' => 'Изображение должно быть в одном из следующих форматов: jpeg, png, jpg, gif, svg, heic, heif.',
-            'image.max' => 'Размер изображения не должен превышать 10MB.',
+            'image.max' => 'Размер изображения не должен превышать 50MB.',
             'image.uploaded' => 'Ошибка загрузки изображения. Проверьте размер файла и попробуйте еще раз.',
         ];
     }

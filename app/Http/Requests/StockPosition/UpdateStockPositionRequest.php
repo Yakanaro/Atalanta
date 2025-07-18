@@ -24,7 +24,7 @@ class UpdateStockPositionRequest extends FormRequest
             'stone_type_id' => 'nullable|exists:stone_types,id',
             'pallet_id' => 'nullable|exists:pallets,id',
             'pallet_number' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,heic,heif|max:10240',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,heic,heif|max:51200',
         ];
     }
 
