@@ -240,6 +240,11 @@
                 placeholder: 'Выберите вид полировки',
                 width: '100%'
             });
+
+            $('.stone-type-select').select2({
+                placeholder: 'Выберите вид камня',
+                width: '100%'
+            });
         }
 
         function addPosition() {
@@ -256,7 +261,7 @@
                         </button>
                     </div>
                     
-                    <div class="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
+                    <div class="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
                         <div>
                             <label for="positions[${positionCounter}][product_type_id]" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Вид продукции</label>
                             <select name="positions[${positionCounter}][product_type_id]" class="product-type-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
@@ -271,6 +276,15 @@
                             <select name="positions[${positionCounter}][polish_type_id]" class="polish-type-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option value="">Выберите вид полировки</option>
                                 @foreach($polishTypes as $id => $name)
+                                    <option value="{{ $id }}">{{ $name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="positions[${positionCounter}][stone_type_id]" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Вид камня</label>
+                            <select name="positions[${positionCounter}][stone_type_id]" class="stone-type-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="">Выберите вид камня</option>
+                                @foreach($stoneTypes as $id => $name)
                                     <option value="{{ $id }}">{{ $name }}</option>
                                 @endforeach
                             </select>
@@ -301,9 +315,12 @@
             container.insertAdjacentHTML('beforeend', newPositionHtml);
 
             // Инициализируем Select2 для новых элементов
-            $(container).find('.position-item').last().find('.product-type-select, .polish-type-select').select2({
+            $(container).find('.position-item').last().find('.product-type-select, .polish-type-select, .stone-type-select').select2({
                 placeholder: function() {
-                    return $(this).hasClass('product-type-select') ? 'Выберите вид продукции' : 'Выберите вид полировки';
+                    if ($(this).hasClass('product-type-select')) return 'Выберите вид продукции';
+                    if ($(this).hasClass('polish-type-select')) return 'Выберите вид полировки';
+                    if ($(this).hasClass('stone-type-select')) return 'Выберите вид камня';
+                    return 'Выберите...';
                 },
                 width: '100%'
             });

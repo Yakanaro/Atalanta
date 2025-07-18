@@ -92,8 +92,9 @@ class PalletController extends Controller
     {
         $polishTypes = PolishType::getForSelect();
         $productTypes = ProductType::getForSelect();
+        $stoneTypes = StoneType::getForSelect();
 
-        return view('pallet.create', compact('polishTypes', 'productTypes'));
+        return view('pallet.create', compact('polishTypes', 'productTypes', 'stoneTypes'));
     }
 
     /**
@@ -138,7 +139,8 @@ class PalletController extends Controller
                 StockPosition::create([
                     'pallet_id' => $pallet->id,
                     'product_type_id' => $positionData['product_type_id'],
-                    'polish_type_id' => $positionData['polish_type_id'],
+                    'polish_type_id' => $positionData['polish_type_id'] ?? null,
+                    'stone_type_id' => $positionData['stone_type_id'] ?? null,
                     'length' => $positionData['length'],
                     'width' => $positionData['width'],
                     'thickness' => $positionData['thickness'],

@@ -21,6 +21,7 @@ class StorePalletRequest extends FormRequest
             'positions.*.thickness' => 'required|numeric|min:0',
             'positions.*.quantity' => 'required|integer|min:1',
             'positions.*.polish_type_id' => 'nullable|exists:polish_types,id',
+            'positions.*.stone_type_id' => 'nullable|exists:stone_types,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,heic,heif|max:51200',
         ];
     }
@@ -43,6 +44,7 @@ class StorePalletRequest extends FormRequest
             'positions.*.quantity.integer' => 'Количество должно быть целым числом.',
             'positions.*.quantity.min' => 'Количество должно быть больше 0.',
             'positions.*.polish_type_id.exists' => 'Выбранный вид полировки не существует.',
+            'positions.*.stone_type_id.exists' => 'Выбранный вид камня не существует.',
             'image.image' => 'Файл должен быть изображением.',
             'image.mimes' => 'Изображение должно быть в одном из следующих форматов: jpeg, png, jpg, gif, svg, heic, heif.',
             'image.max' => 'Размер изображения не должен превышать 50MB.',
