@@ -111,18 +111,23 @@ class PalletController extends Controller
 
             // Обрабатываем загрузку изображения
             if ($request->hasImage()) {
-                $image = $request->getImage();
+                try {
+                    $image = $request->getImage();
 
-                if (!Storage::disk('public')->exists('pallet_images')) {
-                    Storage::disk('public')->makeDirectory('pallet_images');
+                    if (!Storage::disk('public')->exists('pallet_images')) {
+                        Storage::disk('public')->makeDirectory('pallet_images');
+                    }
+
+                    $path = Storage::disk('public')->put('pallet_images', $image);
+                    $url = Storage::url($path);
+
+                    $pallet->update([
+                        'image_path' => $url
+                    ]);
+                } catch (Exception $e) {
+                    DB::rollBack();
+                    return back()->with('error', 'Ошибка при загрузке изображения: ' . $e->getMessage())->withInput();
                 }
-
-                $path = Storage::disk('public')->put('pallet_images', $image);
-                $url = Storage::url($path);
-
-                $pallet->update([
-                    'image_path' => $url
-                ]);
             }
 
             // Создаем позиции для поддона (если есть)
@@ -192,24 +197,28 @@ class PalletController extends Controller
 
             // Обрабатываем загрузку изображения
             if ($request->hasImage()) {
-                // Удаляем старое изображение, если оно есть
-                if ($pallet->getImagePath()) {
-                    $oldPath = str_replace('/storage/', '', parse_url($pallet->getImagePath(), PHP_URL_PATH));
-                    if (Storage::disk('public')->exists($oldPath)) {
-                        Storage::disk('public')->delete($oldPath);
+                try {
+                    // Удаляем старое изображение, если оно есть
+                    if ($pallet->getImagePath()) {
+                        $oldPath = str_replace('/storage/', '', parse_url($pallet->getImagePath(), PHP_URL_PATH));
+                        if (Storage::disk('public')->exists($oldPath)) {
+                            Storage::disk('public')->delete($oldPath);
+                        }
                     }
+
+                    $image = $request->getImage();
+
+                    if (!Storage::disk('public')->exists('pallet_images')) {
+                        Storage::disk('public')->makeDirectory('pallet_images');
+                    }
+
+                    $path = Storage::disk('public')->put('pallet_images', $image);
+                    $url = Storage::url($path);
+
+                    $updateData['image_path'] = $url;
+                } catch (Exception $e) {
+                    return back()->with('error', 'Ошибка при загрузке изображения: ' . $e->getMessage())->withInput();
                 }
-
-                $image = $request->getImage();
-
-                if (!Storage::disk('public')->exists('pallet_images')) {
-                    Storage::disk('public')->makeDirectory('pallet_images');
-                }
-
-                $path = Storage::disk('public')->put('pallet_images', $image);
-                $url = Storage::url($path);
-
-                $updateData['image_path'] = $url;
             }
 
             $pallet->update($updateData);

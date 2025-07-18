@@ -76,7 +76,7 @@
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                                         </svg>
                                         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Нажмите чтобы загрузить</span> или перетащите файл</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF, SVG до 2MB (необязательно)</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF, SVG до 10MB (необязательно)</p>
                                     </div>
                                     <input id="image" name="image" type="file" class="hidden" accept="image/*" onchange="previewImage(event)" />
                                 </label>
@@ -129,6 +129,22 @@
             const previewImg = document.getElementById('previewImg');
             
             if (file) {
+                // Проверяем размер файла (10MB = 10 * 1024 * 1024 bytes)
+                const maxSize = 10 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    alert('Размер файла превышает 10MB. Пожалуйста, выберите файл меньшего размера.');
+                    event.target.value = '';
+                    return;
+                }
+                
+                // Проверяем тип файла
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/svg+xml'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Неподдерживаемый формат файла. Разрешены только: JPEG, PNG, JPG, GIF, SVG.');
+                    event.target.value = '';
+                    return;
+                }
+                
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewImg.src = e.target.result;
