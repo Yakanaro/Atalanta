@@ -18,14 +18,11 @@ services:
       - DB_DATABASE=atalanta
       - DB_USERNAME=atalanta
       - DB_PASSWORD=password
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
       - QUEUE_CONNECTION=sync
-      - CACHE_DRIVER=redis
-      - SESSION_DRIVER=redis
+      - CACHE_DRIVER=database
+      - SESSION_DRIVER=database
     depends_on:
       - mysql
-      - redis
     networks:
       - atalanta-network
 
@@ -62,16 +59,16 @@ services:
     networks:
       - atalanta-network
 
-  redis:
-    image: redis:7-alpine
-    container_name: atalanta-redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - atalanta-network
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: atalanta-redis
+  #   restart: unless-stopped
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   networks:
+  #     - atalanta-network
 
   # queue:
   #   build:
@@ -119,18 +116,15 @@ services:
       - DB_DATABASE=atalanta
       - DB_USERNAME=atalanta
       - DB_PASSWORD=password
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     depends_on:
       - mysql
-      - redis
       - app
     networks:
       - atalanta-network
 
 volumes:
   mysql_data:
-  redis_data:
+  # redis_data:
   assets:
 
 networks:
