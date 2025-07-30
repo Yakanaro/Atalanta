@@ -36,6 +36,7 @@ class StockPositionsExport implements FromCollection, WithHeadings, WithMapping,
             'Вид полировки',
             'Вид камня',
             'Номер поддона',
+            'Статус поддона',
             'Дата создания',
             'Дата обновления'
         ];
@@ -58,6 +59,7 @@ class StockPositionsExport implements FromCollection, WithHeadings, WithMapping,
             $position->polishType ? $position->polishType->name : '-',
             $position->stoneType ? $position->stoneType->name : '-',
             $position->pallet ? $position->pallet->number : '-',
+            $position->pallet ? $position->pallet->status : '-',
             $position->created_at->format('d.m.Y H:i'),
             $position->updated_at->format('d.m.Y H:i')
         ];
