@@ -17,7 +17,7 @@ class StockPositionsExport implements FromCollection, WithHeadings, WithMapping,
      */
     public function collection()
     {
-        return StockPosition::with(['polishType', 'productType', 'stoneType'])->get();
+        return StockPosition::with(['polishType', 'productType', 'stoneType', 'pallet'])->get();
     }
 
     /**
@@ -57,7 +57,7 @@ class StockPositionsExport implements FromCollection, WithHeadings, WithMapping,
             $position->quantity,
             $position->polishType ? $position->polishType->name : '-',
             $position->stoneType ? $position->stoneType->name : '-',
-            $position->pallet_number ?? '-',
+            $position->pallet ? $position->pallet->number : '-',
             $position->created_at->format('d.m.Y H:i'),
             $position->updated_at->format('d.m.Y H:i')
         ];
