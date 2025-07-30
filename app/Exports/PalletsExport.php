@@ -17,7 +17,7 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
      */
     public function collection()
     {
-        return Pallet::with(['stockPositions.productType', 'stockPositions.polishType'])->get();
+        return Pallet::with(['stockPositions.productType', 'stockPositions.polishType', 'stockPositions.stoneType'])->get();
     }
 
     /**
@@ -33,6 +33,7 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
             'Общее количество',
             'Основные типы продукции',
             'Основные виды полировки',
+            'Основные типы камня',
             'Дата создания',
             'Дата обновления'
         ];
@@ -73,6 +74,17 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
             ->keys()
             ->join(', ');
 
+        // Получаем основные типы камня
+        $stoneTypes = $positions->whereNotNull('stoneType')
+            ->groupBy('stoneType.name')
+            ->map(function ($group) {
+                return $group->count();
+            })
+            ->sortDesc()
+            ->take(3)
+            ->keys()
+            ->join(', ');
+
         return [
             $pallet->id,
             $pallet->number,
@@ -81,6 +93,7 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
             $totalQuantity,
             $productTypes ?: '-',
             $polishTypes ?: '-',
+            $stoneTypes ?: '-',
             $pallet->created_at->format('d.m.Y H:i'),
             $pallet->updated_at->format('d.m.Y H:i')
         ];

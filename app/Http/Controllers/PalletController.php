@@ -69,6 +69,42 @@ class PalletController extends Controller
             });
         }
 
+        // Фильтрация по толщине
+        if ($request->filled('filter_thickness_min') || $request->filled('filter_thickness_max')) {
+            $query->whereHas('stockPositions', function ($q) use ($request) {
+                if ($request->filled('filter_thickness_min')) {
+                    $q->where('thickness', '>=', $request->input('filter_thickness_min'));
+                }
+                if ($request->filled('filter_thickness_max')) {
+                    $q->where('thickness', '<=', $request->input('filter_thickness_max'));
+                }
+            });
+        }
+
+        // Фильтрация по длине
+        if ($request->filled('filter_length_min') || $request->filled('filter_length_max')) {
+            $query->whereHas('stockPositions', function ($q) use ($request) {
+                if ($request->filled('filter_length_min')) {
+                    $q->where('length', '>=', $request->input('filter_length_min'));
+                }
+                if ($request->filled('filter_length_max')) {
+                    $q->where('length', '<=', $request->input('filter_length_max'));
+                }
+            });
+        }
+
+        // Фильтрация по ширине
+        if ($request->filled('filter_width_min') || $request->filled('filter_width_max')) {
+            $query->whereHas('stockPositions', function ($q) use ($request) {
+                if ($request->filled('filter_width_min')) {
+                    $q->where('width', '>=', $request->input('filter_width_min'));
+                }
+                if ($request->filled('filter_width_max')) {
+                    $q->where('width', '<=', $request->input('filter_width_max'));
+                }
+            });
+        }
+
         $pallets = $query->orderBy('created_at', 'desc')->get();
 
         // Добавляем статистику для каждого поддона

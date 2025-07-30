@@ -128,6 +128,48 @@
                             </select>
                         </div>
 
+                        <div>
+                            <label for="mobile_filter_thickness_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см) - от</label>
+                            <input type="number" step="0.1" id="mobile_filter_thickness_min" name="filter_thickness_min" value="{{ request('filter_thickness_min') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Минимальная толщина">
+                        </div>
+
+                        <div>
+                            <label for="mobile_filter_thickness_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см) - до</label>
+                            <input type="number" step="0.1" id="mobile_filter_thickness_max" name="filter_thickness_max" value="{{ request('filter_thickness_max') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Максимальная толщина">
+                        </div>
+
+                        <div>
+                            <label for="mobile_filter_length_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см) - от</label>
+                            <input type="number" step="0.1" id="mobile_filter_length_min" name="filter_length_min" value="{{ request('filter_length_min') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Минимальная длина">
+                        </div>
+
+                        <div>
+                            <label for="mobile_filter_length_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см) - до</label>
+                            <input type="number" step="0.1" id="mobile_filter_length_max" name="filter_length_max" value="{{ request('filter_length_max') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Максимальная длина">
+                        </div>
+
+                        <div>
+                            <label for="mobile_filter_width_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см) - от</label>
+                            <input type="number" step="0.1" id="mobile_filter_width_min" name="filter_width_min" value="{{ request('filter_width_min') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Минимальная ширина">
+                        </div>
+
+                        <div>
+                            <label for="mobile_filter_width_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см) - до</label>
+                            <input type="number" step="0.1" id="mobile_filter_width_max" name="filter_width_max" value="{{ request('filter_width_max') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Максимальная ширина">
+                        </div>
+
                         <div class="flex space-x-2">
                             <button type="submit" class="flex-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                 Фильтровать
@@ -205,6 +247,48 @@
                                 <option value="{{ $statusKey }}" {{ request('filter_status') == $statusKey ? 'selected' : '' }}>{{ $statusLabel }}</option>
                                 @endforeach
                             </select>
+                        </div>
+
+                        <div>
+                            <label for="filter_thickness_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см) - от</label>
+                            <input type="number" step="0.1" id="filter_thickness_min" name="filter_thickness_min" value="{{ request('filter_thickness_min') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Мин. толщина">
+                        </div>
+
+                        <div>
+                            <label for="filter_thickness_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см) - до</label>
+                            <input type="number" step="0.1" id="filter_thickness_max" name="filter_thickness_max" value="{{ request('filter_thickness_max') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Макс. толщина">
+                        </div>
+
+                        <div>
+                            <label for="filter_length_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см) - от</label>
+                            <input type="number" step="0.1" id="filter_length_min" name="filter_length_min" value="{{ request('filter_length_min') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Мин. длина">
+                        </div>
+
+                        <div>
+                            <label for="filter_length_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см) - до</label>
+                            <input type="number" step="0.1" id="filter_length_max" name="filter_length_max" value="{{ request('filter_length_max') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Макс. длина">
+                        </div>
+
+                        <div>
+                            <label for="filter_width_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см) - от</label>
+                            <input type="number" step="0.1" id="filter_width_min" name="filter_width_min" value="{{ request('filter_width_min') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Мин. ширина">
+                        </div>
+
+                        <div>
+                            <label for="filter_width_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см) - до</label>
+                            <input type="number" step="0.1" id="filter_width_max" name="filter_width_max" value="{{ request('filter_width_max') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Макс. ширина">
                         </div>
 
                         <div class="flex items-end space-x-2">
