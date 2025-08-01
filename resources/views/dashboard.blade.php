@@ -129,45 +129,24 @@
                         </div>
 
                         <div>
-                            <label for="mobile_filter_thickness_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см) - от</label>
-                            <input type="number" step="0.1" id="mobile_filter_thickness_min" name="filter_thickness_min" value="{{ request('filter_thickness_min') }}"
+                            <label for="mobile_filter_thickness" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см)</label>
+                            <input type="number" step="0.1" id="mobile_filter_thickness" name="filter_thickness" value="{{ request('filter_thickness') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Минимальная толщина">
+                                placeholder="Толщина">
                         </div>
 
                         <div>
-                            <label for="mobile_filter_thickness_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см) - до</label>
-                            <input type="number" step="0.1" id="mobile_filter_thickness_max" name="filter_thickness_max" value="{{ request('filter_thickness_max') }}"
+                            <label for="mobile_filter_length" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см)</label>
+                            <input type="number" step="0.1" id="mobile_filter_length" name="filter_length" value="{{ request('filter_length') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Максимальная толщина">
+                                placeholder="Длина">
                         </div>
 
                         <div>
-                            <label for="mobile_filter_length_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см) - от</label>
-                            <input type="number" step="0.1" id="mobile_filter_length_min" name="filter_length_min" value="{{ request('filter_length_min') }}"
+                            <label for="mobile_filter_width" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см)</label>
+                            <input type="number" step="0.1" id="mobile_filter_width" name="filter_width" value="{{ request('filter_width') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Минимальная длина">
-                        </div>
-
-                        <div>
-                            <label for="mobile_filter_length_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см) - до</label>
-                            <input type="number" step="0.1" id="mobile_filter_length_max" name="filter_length_max" value="{{ request('filter_length_max') }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Максимальная длина">
-                        </div>
-
-                        <div>
-                            <label for="mobile_filter_width_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см) - от</label>
-                            <input type="number" step="0.1" id="mobile_filter_width_min" name="filter_width_min" value="{{ request('filter_width_min') }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Минимальная ширина">
-                        </div>
-
-                        <div>
-                            <label for="mobile_filter_width_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см) - до</label>
-                            <input type="number" step="0.1" id="mobile_filter_width_max" name="filter_width_max" value="{{ request('filter_width_max') }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Максимальная ширина">
+                                placeholder="Ширина">
                         </div>
 
                         <div class="flex space-x-2">
@@ -250,45 +229,24 @@
                         </div>
 
                         <div>
-                            <label for="filter_thickness_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см) - от</label>
-                            <input type="number" step="0.1" id="filter_thickness_min" name="filter_thickness_min" value="{{ request('filter_thickness_min') }}"
+                            <label for="filter_thickness" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см)</label>
+                            <input type="number" step="0.1" id="filter_thickness" name="filter_thickness" value="{{ request('filter_thickness') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Мин. толщина">
+                                placeholder="Толщина">
                         </div>
 
                         <div>
-                            <label for="filter_thickness_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см) - до</label>
-                            <input type="number" step="0.1" id="filter_thickness_max" name="filter_thickness_max" value="{{ request('filter_thickness_max') }}"
+                            <label for="filter_length" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см)</label>
+                            <input type="number" step="0.1" id="filter_length" name="filter_length" value="{{ request('filter_length') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Макс. толщина">
+                                placeholder="Длина">
                         </div>
 
                         <div>
-                            <label for="filter_length_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см) - от</label>
-                            <input type="number" step="0.1" id="filter_length_min" name="filter_length_min" value="{{ request('filter_length_min') }}"
+                            <label for="filter_width" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см)</label>
+                            <input type="number" step="0.1" id="filter_width" name="filter_width" value="{{ request('filter_width') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Мин. длина">
-                        </div>
-
-                        <div>
-                            <label for="filter_length_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см) - до</label>
-                            <input type="number" step="0.1" id="filter_length_max" name="filter_length_max" value="{{ request('filter_length_max') }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Макс. длина">
-                        </div>
-
-                        <div>
-                            <label for="filter_width_min" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см) - от</label>
-                            <input type="number" step="0.1" id="filter_width_min" name="filter_width_min" value="{{ request('filter_width_min') }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Мин. ширина">
-                        </div>
-
-                        <div>
-                            <label for="filter_width_max" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина (см) - до</label>
-                            <input type="number" step="0.1" id="filter_width_max" name="filter_width_max" value="{{ request('filter_width_max') }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Макс. ширина">
+                                placeholder="Ширина">
                         </div>
 
                         <div class="flex items-end space-x-2">
@@ -316,6 +274,9 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Позиций
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Позиции
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Общий вес
@@ -349,6 +310,58 @@
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                     {{ $pallet->stock_positions_count }}
                                 </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                @if($pallet->grouped_positions->count() > 0)
+                                <div class="space-y-3">
+                                    @foreach($pallet->grouped_positions->take(3) as $position)
+                                    <div class="group relative overflow-hidden bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-4 border border-purple-200 dark:border-purple-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-lg hover:shadow-purple-100 dark:hover:shadow-purple-900/20 transition-all duration-300 ease-out">
+                                        <!-- Градиентный фон при наведении -->
+                                        <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                                        <!-- Основной контент -->
+                                        <div class="relative z-10">
+                                            <div class="flex items-start justify-between">
+                                                <div class="min-w-0 flex-1">
+                                                    <div class="text-sm font-semibold text-gray-900 dark:text-white leading-tight">
+                                                        {{ $position['description'] }}
+                                                    </div>
+                                                </div>
+                                                <!-- Количество справа -->
+                                                <div class="flex items-center gap-1 ml-3">
+                                                    <span class="text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                                                        {{ $position['quantity'] }}
+                                                    </span>
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                                                        шт.
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+
+                                    @if($pallet->grouped_positions->count() > 3)
+                                    <div class="text-center">
+                                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 dark:from-purple-900/50 dark:to-blue-900/50 dark:text-purple-300 hover:from-purple-200 hover:to-blue-200 dark:hover:from-purple-800/70 dark:hover:to-blue-800/70 transition-all duration-200 shadow-sm hover:shadow-md">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                            </svg>
+                                            +{{ $pallet->grouped_positions->count() - 3 }} еще
+                                        </span>
+                                    </div>
+                                    @endif
+                                </div>
+                                @else
+                                <div class="text-center py-4">
+                                    <div class="w-12 h-12 mx-auto mb-2 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                                        <svg class="w-6 h-6 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm">Нет позиций</span>
+                                </div>
+                                @endif
                             </td>
                             <td class="px-6 py-4">
                                 {{ $pallet->total_weight ? number_format($pallet->total_weight, 2) . ' кг' : '-' }}
@@ -556,6 +569,51 @@
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Общее кол-во</p>
                             </div>
                         </div>
+
+                        @if($pallet->grouped_positions->count() > 0)
+                        <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                            <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-4">Позиции:</h4>
+                            <div class="space-y-4">
+                                @foreach($pallet->grouped_positions->take(3) as $position)
+                                <div class="group relative overflow-hidden bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-2xl p-5 border border-purple-200 dark:border-purple-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-xl hover:shadow-purple-100 dark:hover:shadow-purple-900/20 transition-all duration-300 ease-out">
+                                    <!-- Градиентный фон при наведении -->
+                                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                                    <!-- Основной контент -->
+                                    <div class="relative z-10">
+                                        <div class="flex items-start justify-between">
+                                            <div class="min-w-0 flex-1">
+                                                <div class="text-base font-semibold text-gray-900 dark:text-white leading-tight">
+                                                    {{ $position['description'] }}
+                                                </div>
+                                            </div>
+                                            <!-- Количество справа -->
+                                            <div class="flex items-center gap-2 ml-4">
+                                                <span class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                                                    {{ $position['quantity'] }}
+                                                </span>
+                                                <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                                                    шт.
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+
+                                @if($pallet->grouped_positions->count() > 3)
+                                <div class="text-center">
+                                    <span class="inline-flex items-center px-5 py-3 rounded-full text-base font-medium bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 dark:from-purple-900/50 dark:to-blue-900/50 dark:text-purple-300 hover:from-purple-200 hover:to-blue-200 dark:hover:from-purple-800/70 dark:hover:to-blue-800/70 transition-all duration-200 shadow-lg hover:shadow-xl">
+                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                        </svg>
+                                        +{{ $pallet->grouped_positions->count() - 3 }} еще
+                                    </span>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
                 @endforeach

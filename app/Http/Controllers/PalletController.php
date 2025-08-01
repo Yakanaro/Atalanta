@@ -70,38 +70,23 @@ class PalletController extends Controller
         }
 
         // Фильтрация по толщине
-        if ($request->filled('filter_thickness_min') || $request->filled('filter_thickness_max')) {
+        if ($request->filled('filter_thickness')) {
             $query->whereHas('stockPositions', function ($q) use ($request) {
-                if ($request->filled('filter_thickness_min')) {
-                    $q->where('thickness', '>=', $request->input('filter_thickness_min'));
-                }
-                if ($request->filled('filter_thickness_max')) {
-                    $q->where('thickness', '<=', $request->input('filter_thickness_max'));
-                }
+                $q->where('thickness', $request->input('filter_thickness'));
             });
         }
 
         // Фильтрация по длине
-        if ($request->filled('filter_length_min') || $request->filled('filter_length_max')) {
+        if ($request->filled('filter_length')) {
             $query->whereHas('stockPositions', function ($q) use ($request) {
-                if ($request->filled('filter_length_min')) {
-                    $q->where('length', '>=', $request->input('filter_length_min'));
-                }
-                if ($request->filled('filter_length_max')) {
-                    $q->where('length', '<=', $request->input('filter_length_max'));
-                }
+                $q->where('length', $request->input('filter_length'));
             });
         }
 
         // Фильтрация по ширине
-        if ($request->filled('filter_width_min') || $request->filled('filter_width_max')) {
+        if ($request->filled('filter_width')) {
             $query->whereHas('stockPositions', function ($q) use ($request) {
-                if ($request->filled('filter_width_min')) {
-                    $q->where('width', '>=', $request->input('filter_width_min'));
-                }
-                if ($request->filled('filter_width_max')) {
-                    $q->where('width', '<=', $request->input('filter_width_max'));
-                }
+                $q->where('width', $request->input('filter_width'));
             });
         }
 
@@ -111,6 +96,30 @@ class PalletController extends Controller
         $pallets->each(function ($pallet) {
             $pallet->total_quantity = $pallet->stockPositions->sum('quantity');
             $pallet->total_weight = $pallet->stockPositions->sum('weight');
+
+            // Группируем позиции по типам для отображения
+            $pallet->grouped_positions = $pallet->stockPositions->groupBy(function ($position) {
+                $parts = [];
+                $parts[] = $position->productType?->name ?? 'Неизвестный тип';
+
+                if ($position->stoneType?->name) {
+                    $parts[] = $position->stoneType->name;
+                }
+
+                if ($position->polishType?->name) {
+                    $parts[] = $position->polishType->name;
+                }
+
+                $parts[] = intval($position->length) . '×' . intval($position->width) . '×' . intval($position->thickness) . 'см';
+
+                return implode(' • ', $parts);
+            })->map(function ($positions, $key) {
+                return [
+                    'description' => $key,
+                    'quantity' => $positions->sum('quantity'),
+                    'count' => $positions->count()
+                ];
+            });
         });
 
         $productTypes = ProductType::getActive();
