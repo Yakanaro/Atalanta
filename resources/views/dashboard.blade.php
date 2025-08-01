@@ -315,9 +315,13 @@
                                 @if($pallet->grouped_positions->count() > 0)
                                 <div class="space-y-3">
                                     @foreach($pallet->grouped_positions->take(3) as $position)
-                                    <div class="group relative overflow-hidden bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-4 border border-purple-200 dark:border-purple-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-lg hover:shadow-purple-100 dark:hover:shadow-purple-900/20 transition-all duration-300 ease-out">
+                                    <div class="group relative overflow-hidden rounded-xl p-4 border border-purple-200 dark:border-purple-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-lg hover:shadow-purple-100 dark:hover:shadow-purple-900/20 transition-all duration-300 ease-out">
+                                        <!-- Светлый фон для светлой темы -->
+                                        <div class="dark:hidden absolute inset-0 rounded-xl" style="background: linear-gradient(to right, #faf5ff 0%, #eff6ff 100%);"></div>
+                                        <!-- Темный фон для темной темы -->
+                                        <div class="hidden dark:block absolute inset-0 rounded-xl" style="background: linear-gradient(to right, rgba(88, 28, 135, 0.3) 0%, rgba(30, 58, 138, 0.3) 100%);"></div>
                                         <!-- Градиентный фон при наведении -->
-                                        <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        <div class="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background: linear-gradient(to right, rgba(168, 85, 247, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);"></div>
 
                                         <!-- Основной контент -->
                                         <div class="relative z-10">
@@ -329,7 +333,7 @@
                                                 </div>
                                                 <!-- Количество справа -->
                                                 <div class="flex items-center gap-1 ml-3">
-                                                    <span class="text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                                                    <span class="text-lg font-bold" style="background: linear-gradient(to right, #9333ea, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
                                                         {{ $position['quantity'] }}
                                                     </span>
                                                     <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">
@@ -575,9 +579,13 @@
                             <h4 class="text-sm font-medium text-gray-900 dark:text-white mb-4">Позиции:</h4>
                             <div class="space-y-4">
                                 @foreach($pallet->grouped_positions->take(3) as $position)
-                                <div class="group relative overflow-hidden bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-2xl p-5 border border-purple-200 dark:border-purple-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-xl hover:shadow-purple-100 dark:hover:shadow-purple-900/20 transition-all duration-300 ease-out">
+                                <div class="group relative overflow-hidden rounded-2xl p-5 border border-purple-200 dark:border-purple-700 hover:border-purple-300 dark:hover:border-purple-600 hover:shadow-xl hover:shadow-purple-100 dark:hover:shadow-purple-900/20 transition-all duration-300 ease-out">
+                                    <!-- Светлый фон для светлой темы -->
+                                    <div class="dark:hidden absolute inset-0 rounded-2xl" style="background: linear-gradient(to right, #faf5ff 0%, #eff6ff 100%);"></div>
+                                    <!-- Темный фон для темной темы -->
+                                    <div class="hidden dark:block absolute inset-0 rounded-2xl" style="background: linear-gradient(to right, rgba(88, 28, 135, 0.3) 0%, rgba(30, 58, 138, 0.3) 100%);"></div>
                                     <!-- Градиентный фон при наведении -->
-                                    <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background: linear-gradient(to right, rgba(168, 85, 247, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);"></div>
 
                                     <!-- Основной контент -->
                                     <div class="relative z-10">
@@ -589,7 +597,7 @@
                                             </div>
                                             <!-- Количество справа -->
                                             <div class="flex items-center gap-2 ml-4">
-                                                <span class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+                                                <span class="text-2xl font-bold" style="background: linear-gradient(to right, #9333ea, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
                                                     {{ $position['quantity'] }}
                                                 </span>
                                                 <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">
