@@ -85,6 +85,13 @@
                         </div>
 
                         <div>
+                            <label for="mobile_filter_order_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Заказ</label>
+                            <input type="text" id="mobile_filter_order_number" name="filter_order_number" value="{{ request('filter_order_number') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Поиск по заказу">
+                        </div>
+
+                        <div>
                             <label for="mobile_filter_product_type" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Тип продукции</label>
                             <select id="mobile_filter_product_type" name="filter_product_type_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -129,13 +136,6 @@
                         </div>
 
                         <div>
-                            <label for="mobile_filter_thickness" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см)</label>
-                            <input type="number" step="0.1" id="mobile_filter_thickness" name="filter_thickness" value="{{ request('filter_thickness') }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Толщина">
-                        </div>
-
-                        <div>
                             <label for="mobile_filter_length" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Длина (см)</label>
                             <input type="number" step="0.1" id="mobile_filter_length" name="filter_length" value="{{ request('filter_length') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -147,6 +147,13 @@
                             <input type="number" step="0.1" id="mobile_filter_width" name="filter_width" value="{{ request('filter_width') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Ширина">
+                        </div>
+
+                        <div>
+                            <label for="mobile_filter_thickness" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Толщина (см)</label>
+                            <input type="number" step="0.1" id="mobile_filter_thickness" name="filter_thickness" value="{{ request('filter_thickness') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Толщина">
                         </div>
 
                         <div class="flex space-x-2">
@@ -182,6 +189,13 @@
                             <input type="text" id="filter_pallet_number" name="filter_pallet_number" value="{{ request('filter_pallet_number') }}"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Поиск по номеру поддона">
+                        </div>
+
+                        <div>
+                            <label for="filter_order_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Заказ</label>
+                            <input type="text" id="filter_order_number" name="filter_order_number" value="{{ request('filter_order_number') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Поиск по заказу">
                         </div>
 
                         <div>
@@ -270,6 +284,9 @@
                                 Номер поддона
                             </th>
                             <th scope="col" class="px-6 py-3">
+                                Заказ
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 Статус
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -298,6 +315,9 @@
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ $pallet->number }}
                             </th>
+                            <td class="px-6 py-4">
+                                {{ $pallet->order_number ?: '-' }}
+                            </td>
                             <td class="px-6 py-4">
                                 @php
                                 $statusData = $pallet->getStatusWithClass();
@@ -447,7 +467,7 @@
 
                         @if(count($pallets) === 0)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td colspan="7" class="px-6 py-20 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="9" class="px-6 py-20 text-center text-gray-500 dark:text-gray-400">
                                 <div class="flex flex-col items-center justify-center space-y-4">
                                     <svg class="w-16 h-16 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
@@ -488,6 +508,7 @@
                         <div>
                             <h3 class="font-bold text-gray-900 dark:text-white">Поддон {{ $pallet->number }}</h3>
                             <p class="text-xs text-gray-500 dark:text-gray-400">{{ $pallet->created_at->format('d.m.Y H:i') }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Заказ: <span class="font-medium text-gray-900 dark:text-white">{{ $pallet->order_number ?: '—' }}</span></p>
                             @php
                             $statusData = $pallet->getStatusWithClass();
                             @endphp

@@ -159,6 +159,17 @@
                             </div>
                         </div>
 
+                        <!-- Заказ (необязательно) -->
+                        <div class="mb-6">
+                            <label for="order_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Заказ (необязательно)</label>
+                            <input type="text" id="order_number" name="order_number" value="{{ old('order_number') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full md:w-1/2 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Укажите номер/название заказа" />
+                            @error('order_number')
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!-- Изображение поддона -->
                         <div class="mb-6">
                             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Изображение поддона</label>

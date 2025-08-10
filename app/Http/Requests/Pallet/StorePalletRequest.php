@@ -14,6 +14,7 @@ class StorePalletRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'order_number' => 'nullable|string|max:255',
             'positions' => 'nullable|array',
             'positions.*.product_type_id' => 'required|exists:product_types,id',
             'positions.*.length' => 'required|numeric|min:0',
@@ -29,6 +30,7 @@ class StorePalletRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'order_number.max' => 'Поле заказ не должно превышать 255 символов.',
             'positions.*.product_type_id.required' => 'Необходимо выбрать вид продукции.',
             'positions.*.product_type_id.exists' => 'Выбранный вид продукции не существует.',
             'positions.*.length.required' => 'Длина обязательна для заполнения.',

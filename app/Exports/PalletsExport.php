@@ -28,6 +28,7 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
         return [
             'ID поддона',
             'Номер поддона',
+            'Заказ',
             'Количество позиций',
             'Общий вес (кг)',
             'Общее количество',
@@ -88,6 +89,7 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
         return [
             $pallet->id,
             $pallet->number,
+            $pallet->order_number,
             $positionsCount,
             $this->formatNumber($totalWeight),
             $totalQuantity,

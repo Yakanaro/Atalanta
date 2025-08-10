@@ -37,6 +37,7 @@ class Pallet extends Model
 
     protected $fillable = [
         'number',
+        'order_number',
         'status',
         'qr_code_path',
         'image_path',

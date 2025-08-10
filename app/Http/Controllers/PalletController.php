@@ -43,6 +43,11 @@ class PalletController extends Controller
             $query->where('number', 'like', '%' . $request->input('filter_pallet_number') . '%');
         }
 
+        // Фильтрация по заказу
+        if ($request->filled('filter_order_number')) {
+            $query->where('order_number', 'like', '%' . $request->input('filter_order_number') . '%');
+        }
+
         // Фильтрация по статусу поддона
         if ($request->filled('filter_status')) {
             $query->where('status', $request->input('filter_status'));
@@ -153,6 +158,7 @@ class PalletController extends Controller
             // Создаем поддон с автоматически сгенерированным номером
             $pallet = Pallet::create([
                 'number' => Pallet::generateNextNumber(),
+                'order_number' => $request->input('order_number'),
             ]);
 
             // Обрабатываем загрузку изображения
@@ -240,6 +246,7 @@ class PalletController extends Controller
         try {
             $updateData = [
                 'number' => $request->getNumber(),
+                'order_number' => $request->input('order_number'),
             ];
 
             // Обрабатываем загрузку изображения
