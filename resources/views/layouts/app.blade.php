@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark h-full">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark h-full bg-gray-900">
 
 <head>
     <meta charset="utf-8">
@@ -24,6 +24,18 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
 
+    <!-- Force page background in case external CSS overrides it (prod mobile fix) -->
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111827">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f3f4f6">
+    <style>
+        :root { color-scheme: dark light; }
+        html { background-color: #111827; }
+        @media (prefers-color-scheme: light) { html { background-color: #f3f4f6; } }
+        html.dark { background-color: #111827 !important; }
+        html.dark body { background-color: #111827 !important; }
+        body { min-height: 100svh; }
+    </style>
+
     <!-- Flowbite CSS removed: styles come from Tailwind build via plugin to avoid overriding dark classes -->
 
     <!-- Установка темной темы по умолчанию -->
@@ -37,7 +49,7 @@
     @stack('styles')
 </head>
 
-<body class="font-sans antialiased min-h-screen bg-gray-100 dark:bg-gray-900">
+<body class="font-sans antialiased min-h-screen min-h-[100svh] bg-gray-100 dark:bg-gray-900">
         <div class="min-h-full">
         @include('layouts.navigation')
 
