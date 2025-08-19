@@ -37,6 +37,38 @@
         body { min-height: 100svh; }
         /* Ensure white utility does not show up in dark theme on prod (Flowbite CDN order) */
         html.dark .bg-white { background-color: #1f2937 !important; }
+        
+        /* Дополнительные стили для мобильной версии */
+        @media (max-width: 768px) {
+            html.dark {
+                background-color: #111827 !important;
+            }
+            html.dark body {
+                background-color: #111827 !important;
+            }
+            html.dark main {
+                background-color: #111827 !important;
+            }
+            html.dark .bg-white {
+                background-color: #1f2937 !important;
+            }
+            html.dark .bg-gray-50 {
+                background-color: #374151 !important;
+            }
+            html.dark .bg-gray-100 {
+                background-color: #1f2937 !important;
+            }
+        }
+        
+        /* Принудительная установка темного фона для всех элементов */
+        html.dark * {
+            border-color: #374151 !important;
+        }
+        html.dark input, html.dark select, html.dark textarea {
+            background-color: #374151 !important;
+            color: #f9fafb !important;
+            border-color: #4b5563 !important;
+        }
     </style>
 
     <!-- Flowbite CSS removed: styles come from Tailwind build via plugin to avoid overriding dark classes -->
@@ -46,6 +78,28 @@
         // Устанавливаем темную тему по умолчанию
         document.documentElement.classList.add('dark');
         localStorage.setItem('color-theme', 'dark');
+        
+        // Принудительная установка темного фона для мобильных устройств
+        function forceDarkTheme() {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.backgroundColor = '#111827';
+            document.body.style.backgroundColor = '#111827';
+            
+            // Применяем темный фон ко всем основным контейнерам
+            const main = document.querySelector('main');
+            if (main) {
+                main.style.backgroundColor = '#111827';
+            }
+        }
+        
+        // Вызываем сразу
+        forceDarkTheme();
+        
+        // Вызываем при загрузке DOM
+        document.addEventListener('DOMContentLoaded', forceDarkTheme);
+        
+        // Вызываем при полной загрузке страницы
+        window.addEventListener('load', forceDarkTheme);
     </script>
 
     <!-- Additional Styles -->
@@ -124,9 +178,19 @@
                     (!('color-theme' in localStorage) && document.documentElement.classList.contains('dark'))) {
                     document.documentElement.classList.remove('dark');
                     localStorage.setItem('color-theme', 'light');
+                    document.documentElement.style.backgroundColor = '#f3f4f6';
+                    document.body.style.backgroundColor = '#f3f4f6';
                 } else {
                     document.documentElement.classList.add('dark');
                     localStorage.setItem('color-theme', 'dark');
+                    document.documentElement.style.backgroundColor = '#111827';
+                    document.body.style.backgroundColor = '#111827';
+                    
+                    // Применяем темный фон ко всем основным контейнерам
+                    const main = document.querySelector('main');
+                    if (main) {
+                        main.style.backgroundColor = '#111827';
+                    }
                 }
 
                 // Обновляем иконки

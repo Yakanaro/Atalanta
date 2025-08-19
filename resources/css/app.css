@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Принудительная темная тема для мобильных устройств */
+@media (max-width: 768px) {
+    html.dark {
+        background-color: #111827 !important;
+    }
+    
+    html.dark body {
+        background-color: #111827 !important;
+    }
+    
+    html.dark main {
+        background-color: #111827 !important;
+    }
+    
+    html.dark .bg-white {
+        background-color: #1f2937 !important;
+    }
+    
+    html.dark .bg-gray-50 {
+        background-color: #374151 !important;
+    }
+    
+    html.dark .bg-gray-100 {
+        background-color: #1f2937 !important;
+    }
+}
+
+/* Дополнительные стили для всех размеров экрана */
+html.dark {
+    background-color: #111827 !important;
+}
+
+html.dark body {
+    background-color: #111827 !important;
+}
