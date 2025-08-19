@@ -34,6 +34,8 @@
         html.dark { background-color: #111827 !important; }
         html.dark body { background-color: #111827 !important; }
         body { min-height: 100svh; }
+        /* Ensure white utility does not show up in dark theme on prod (Flowbite CDN order) */
+        html.dark .bg-white { background-color: #1f2937 !important; }
     </style>
 
     <!-- Flowbite CSS removed: styles come from Tailwind build via plugin to avoid overriding dark classes -->
