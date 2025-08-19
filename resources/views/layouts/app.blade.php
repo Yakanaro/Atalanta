@@ -19,10 +19,11 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
+    <!-- 1) Vendor CSS first -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+
+    <!-- 2) Our CSS last (should win the cascade on prod) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- Force page background in case external CSS overrides it (prod mobile fix) -->
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#111827">
