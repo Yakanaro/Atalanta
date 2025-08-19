@@ -17,6 +17,307 @@
                 </div>
             </div>
 
+
+            @php($canEdit = auth()->user() && method_exists(auth()->user(), 'canEdit') ? auth()->user()->canEdit() : false)
+            @if(!$canEdit)
+            <div class="mb-4 p-4 text-sm text-amber-700 bg-amber-100 rounded-lg dark:bg-amber-200 dark:text-amber-800" role="alert">
+                Вы находитесь в режиме только просмотра. Изменение настроек недоступно.
+            </div>
+            @endif
+
+            @if(auth()->user() && method_exists(auth()->user(), 'canEdit') && auth()->user()->canEdit())
+            <!-- Пользователи -->
+            <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg mt-6">
+                <div class="px-4 py-5 sm:px-6 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Пользователи</h3>
+                </div>
+
+                <div class="px-4 py-5 sm:p-6">
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Создание пользователя (пароль генерируется автоматически)</p>
+                            <form action="{{ route('settings.users.create') }}" method="POST" class="mt-3 grid grid-cols-1 md:grid-cols-5 gap-3">
+                                @csrf
+                                <input type="text" name="name" placeholder="Имя (необязательно)" class="w-full focus:ring-blue-500 focus:border-blue-500 shadow-sm text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md p-2.5">
+                                <input type="text" name="username" placeholder="Логин (a-z, 0-9, -, _)" class="w-full focus:ring-blue-500 focus:border-blue-500 shadow-sm text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md p-2.5">
+                                <input type="email" name="email" placeholder="Email (необязательно)" class="w-full focus:ring-blue-500 focus:border-blue-500 shadow-sm text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md p-2.5">
+                                <select name="role" class="w-full focus:ring-blue-500 focus:border-blue-500 shadow-sm text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md p-2.5">
+                                    <option value="">Полный доступ</option>
+                                    <option value="viewer">Только просмотр</option>
+                                </select>
+                                <button type="submit" class="flex items-center justify-center h-10 px-3 py-0 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm">Создать</button>
+                            </form>
+                            
+                        </div>
+
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Список пользователей</p>
+                            <div id="gp-banner" class="hidden mb-3 p-3 text-sm text-indigo-700 bg-indigo-100 rounded-lg dark:bg-indigo-200 dark:text-indigo-800" role="alert">
+                                <div class="flex items-center justify-between gap-3 flex-wrap">
+                                    <div class="gp-text font-mono"></div>
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" class="gp-copy inline-flex items-center px-3 h-8 rounded-md bg-indigo-600 hover:bg-indigo-700 text-white">Копировать</button>
+                                        <button type="button" class="gp-clear inline-flex items-center px-3 h-8 rounded-md bg-gray-600 hover:bg-gray-700 text-white">Скрыть</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Desktop table -->
+                            <div class="hidden md:block overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                                    <thead class="bg-gray-50 dark:bg-gray-700">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300">Email</th>
+                                            <th class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300">Логин</th>
+                                            <th class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300">Имя</th>
+                                            <th class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300">Роль</th>
+                                            <th class="px-4 py-2 text-left font-medium text-gray-700 dark:text-gray-300">Пароль (новый)</th>
+                                            <th class="px-4 py-2"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                        @foreach($users as $u)
+                                        <tr>
+                                            <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ $u->email }}</td>
+                                            <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ $u->username }}</td>
+                                            <td class="px-4 py-2 text-gray-800 dark:text-gray-200">{{ $u->name }}</td>
+                                            <td class="px-4 py-2">
+                                                <form action="{{ route('settings.users.update-role', $u) }}" method="POST" class="flex items-center gap-2">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <select name="role" class="focus:ring-blue-500 focus:border-blue-500 shadow-sm text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md p-2.5">
+                                                        <option value="" {{ $u->role ? '' : 'selected' }}>Полный доступ</option>
+                                                        <option value="viewer" {{ $u->role === 'viewer' ? 'selected' : '' }}>Только просмотр</option>
+                                                    </select>
+                                                    <button type="submit" class="flex items-center justify-center h-9 px-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md">Сохранить</button>
+                                                </form>
+                                            </td>
+                                            <td class="px-4 py-2 text-gray-800 dark:text-gray-200">
+                                                <span class="pw-cell font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded" data-user-id="{{ $u->id }}" data-email="{{ $u->email }}" data-username="{{ $u->username }}">
+                                                    @if(session('generated_password_email') === $u->email)
+                                                        {{ session('generated_password') }}
+                                                    @endif
+                                                </span>
+                                                <button type="button" class="copy-btn hidden ml-2 inline-flex items-center px-2 h-7 rounded bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 text-xs" data-user-id="{{ $u->id }}" data-email="{{ $u->email }}" data-username="{{ $u->username }}">Копировать</button>
+                                            </td>
+                                            <td class="px-4 py-2">
+                                                <div class="flex items-center gap-2">
+                                                    <form action="{{ route('settings.users.reset-password', $u) }}" method="POST" onsubmit="return confirm('Сбросить пароль пользователю {{ $u->email }}? Новый пароль появится в таблице.');">
+                                                        @csrf
+                                                        <button type="submit" class="inline-flex items-center px-3 h-9 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-sm">Сбросить пароль</button>
+                                                    </form>
+                                                    @if(auth()->id() !== $u->id)
+                                                    <form action="{{ route('settings.users.delete', $u) }}" method="POST" onsubmit="return confirm('Удалить пользователя {{ $u->email }}? Это действие необратимо.');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="inline-flex items-center px-3 h-9 rounded-md bg-red-600 hover:bg-red-700 text-white text-sm">Удалить</button>
+                                                    </form>
+                                                    @else
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400">Нельзя удалить себя</span>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Mobile list -->
+                            <div class="md:hidden space-y-3">
+                                @foreach($users as $u)
+                                <div class="p-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/40">
+                                    @if(session('generated_password_email') === $u->email)
+                                    <div class="mb-2">
+                                        <div class="text-xs uppercase text-gray-500 dark:text-gray-400">Пароль (новый)</div>
+                                        <div class="text-sm font-mono text-gray-900 dark:text-gray-100 break-all bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">{{ session('generated_password') }}</div>
+                                    </div>
+                                    @endif
+                                    <div class="mb-2 gp-mobile hidden" data-user-id="{{ $u->id }}" data-email="{{ $u->email }}" data-username="{{ $u->username }}">
+                                        <div class="text-xs uppercase text-gray-500 dark:text-gray-400">Пароль (новый)</div>
+                                        <div class="flex items-center gap-2">
+                                            <div class="pw-mobile text-sm font-mono text-gray-900 dark:text-gray-100 break-all bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded"></div>
+                                            <button type="button" class="copy-btn-mobile inline-flex items-center px-2 h-8 rounded bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 text-xs" data-user-id="{{ $u->id }}" data-email="{{ $u->email }}" data-username="{{ $u->username }}">Копировать</button>
+                                        </div>
+                                    </div>
+                                    <div class="text-xs uppercase text-gray-500 dark:text-gray-400">Email</div>
+                                    <div class="text-sm text-gray-900 dark:text-gray-100 break-all">{{ $u->email }}</div>
+                                    <div class="mt-2 text-xs uppercase text-gray-500 dark:text-gray-400">Имя</div>
+                                    <div class="text-sm text-gray-900 dark:text-gray-100">{{ $u->name }}</div>
+                                    <div class="mt-3">
+                                        <form action="{{ route('settings.users.update-role', $u) }}" method="POST" class="flex flex-col sm:flex-row gap-2">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="role" class="w-full focus:ring-blue-500 focus:border-blue-500 shadow-sm text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md p-2.5">
+                                                <option value="" {{ $u->role ? '' : 'selected' }}>Полный доступ</option>
+                                                <option value="viewer" {{ $u->role === 'viewer' ? 'selected' : '' }}>Только просмотр</option>
+                                            </select>
+                                            <button type="submit" class="w-full sm:w-auto flex items-center justify-center h-10 px-3 bg-blue-500 hover:bg-blue-600 text-white rounded-md">Сохранить</button>
+                                        </form>
+                                        <form action="{{ route('settings.users.reset-password', $u) }}" method="POST" class="mt-2" onsubmit="return confirm('Сбросить пароль пользователю {{ $u->email }}? Новый пароль появится в карточке.');">
+                                            @csrf
+                                            <button type="submit" class="w-full sm:w-auto flex items-center justify-center h-10 px-3 bg-amber-600 hover:bg-amber-700 text-white rounded-md">Сбросить пароль</button>
+                                        </form>
+                                        @if(auth()->id() !== $u->id)
+                                        <form action="{{ route('settings.users.delete', $u) }}" method="POST" class="mt-2" onsubmit="return confirm('Удалить пользователя {{ $u->email }}? Это действие необратимо.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="w-full sm:w-auto flex items-center justify-center h-10 px-3 bg-red-600 hover:bg-red-700 text-white rounded-md">Удалить</button>
+                                        </form>
+                                        @else
+                                        <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">Нельзя удалить себя</div>
+                                        @endif
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if(session('generated_password'))
+            <div id="gp-seed" data-gp="{{ session('generated_password') }}" data-ge="{{ session('generated_password_email') }}" data-guid="{{ session('generated_password_user_id') }}" data-gu="{{ session('generated_password_username') }}" class="hidden"></div>
+            @endif
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    try {
+                        // Seed from server (one-time after create)
+                        var seed = document.getElementById('gp-seed');
+                        if (seed) {
+                            var seedPw = seed.getAttribute('data-gp');
+                            var seedEmail = seed.getAttribute('data-ge');
+                            var seedUserId = seed.getAttribute('data-guid');
+                            var seedUsername = seed.getAttribute('data-gu');
+                            if (seedPw) {
+                                localStorage.setItem('generated_password', seedPw);
+                                if (seedEmail) localStorage.setItem('generated_password_email', seedEmail);
+                                if (seedUserId) localStorage.setItem('generated_password_user_id', seedUserId);
+                                if (seedUsername) localStorage.setItem('generated_password_username', seedUsername);
+                            }
+                        }
+                        var gp = localStorage.getItem('generated_password');
+                        var ge = localStorage.getItem('generated_password_email');
+                        var guid = localStorage.getItem('generated_password_user_id');
+                        var gu = localStorage.getItem('generated_password_username');
+                        if (gp) {
+                            // Fill table cells
+                            document.querySelectorAll('.pw-cell').forEach(function(el){
+                                var match = (guid && el.dataset.userId === guid) || (el.dataset.email && el.dataset.email === ge) || (gu && el.dataset.username === gu);
+                                if (match) {
+                                    el.textContent = gp;
+                                    el.classList.remove('hidden');
+                                    var selector = '.copy-btn';
+                                    var btn = el.parentElement.querySelector(selector);
+                                    // ensure it's the same row button
+                                    if (btn) btn.classList.remove('hidden');
+                                }
+                            });
+                            // Fill mobile cards
+                            document.querySelectorAll('.gp-mobile').forEach(function(card){
+                                var match = (guid && card.dataset.userId === guid) || (card.dataset.email && card.dataset.email === ge) || (gu && card.dataset.username === gu);
+                                if (match) {
+                                    card.classList.remove('hidden');
+                                    var box = card.querySelector('.pw-mobile');
+                                    if (box) box.textContent = gp;
+                                    var mbtn = card.querySelector('.copy-btn-mobile');
+                                    if (mbtn) mbtn.classList.remove('hidden');
+                                }
+                            });
+                            // Show banner
+                            var banner = document.getElementById('gp-banner');
+                            if (banner) {
+                                banner.classList.remove('hidden');
+                                var text = banner.querySelector('.gp-text');
+                                if (text) {
+                                    var who = ge || (gu ? ('логин ' + gu) : (guid ? ('ID ' + guid) : 'новый пользователь'));
+                                    text.textContent = 'Пароль для ' + who + ': ' + gp;
+                                }
+                                banner.querySelectorAll('.gp-clear').forEach(function(btn){
+                                    btn.addEventListener('click', function(){
+                                        localStorage.removeItem('generated_password');
+                                        localStorage.removeItem('generated_password_email');
+                                        localStorage.removeItem('generated_password_user_id');
+                                        localStorage.removeItem('generated_password_username');
+                                        banner.classList.add('hidden');
+                                        // Clear cells
+                                        document.querySelectorAll('.pw-cell').forEach(function(el){
+                                            if ((guid && el.dataset.userId === guid) || (el.dataset.email === ge) || (gu && el.dataset.username === gu)) el.textContent = '';
+                                        });
+                                        document.querySelectorAll('.gp-mobile').forEach(function(card){
+                                            if ((guid && card.dataset.userId === guid) || (card.dataset.email === ge) || (gu && card.dataset.username === gu)) card.classList.add('hidden');
+                                        });
+                                        document.querySelectorAll('.copy-btn').forEach(function(b){ b.classList.add('hidden'); });
+                                    });
+                                });
+                                banner.querySelectorAll('.gp-copy').forEach(function(btn){
+                                    btn.addEventListener('click', function(){ copyToClipboard(gp, btn); });
+                                });
+                            }
+                        }
+                    } catch (e) { /* ignore */ }
+                });
+
+                function copyToClipboard(text, el){
+                    var original = el && el.textContent;
+                    var setDone = function(){ if(el){ el.textContent = 'Скопировано'; setTimeout(function(){ el.textContent = original; }, 1500); } };
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(setDone).catch(function(){
+                            fallbackCopy(text); setDone();
+                        });
+                    } else { fallbackCopy(text); setDone(); }
+                }
+                function fallbackCopy(text){
+                    var ta = document.createElement('textarea');
+                    ta.value = text; document.body.appendChild(ta); ta.select();
+                    try { document.execCommand('copy'); } catch(e) {}
+                    document.body.removeChild(ta);
+                }
+
+                // Wire table/mobile copy buttons
+                document.querySelectorAll('.copy-btn').forEach(function(btn){
+                    btn.addEventListener('click', function(){
+                        var email = btn.getAttribute('data-email');
+                        var uid = btn.getAttribute('data-user-id');
+                        var uname = btn.getAttribute('data-username');
+                        var gp = localStorage.getItem('generated_password');
+                        var ge = localStorage.getItem('generated_password_email');
+                        var guid = localStorage.getItem('generated_password_user_id');
+                        var gu = localStorage.getItem('generated_password_username');
+                        var ok = (gp && ((guid && uid && guid === uid) || (ge && email && ge === email) || (gu && uname && gu === uname)));
+                        if (ok) copyToClipboard(gp, btn);
+                    });
+                });
+                document.querySelectorAll('.copy-btn-mobile').forEach(function(btn){
+                    btn.addEventListener('click', function(){
+                        var email = btn.getAttribute('data-email');
+                        var uid = btn.getAttribute('data-user-id');
+                        var uname = btn.getAttribute('data-username');
+                        var gp = localStorage.getItem('generated_password');
+                        var ge = localStorage.getItem('generated_password_email');
+                        var guid = localStorage.getItem('generated_password_user_id');
+                        var gu = localStorage.getItem('generated_password_username');
+                        var ok = (gp && ((guid && uid && guid === uid) || (ge && email && ge === email) || (gu && uname && gu === uname)));
+                        if (ok) copyToClipboard(gp, btn);
+                    });
+                });
+            </script>
+            @if(!$canEdit)
+            <script>
+                document.addEventListener('DOMContentLoaded', function(){
+                    try {
+                        // Заблокировать все формы настроек (создание/редактирование/удаление)
+                        document.querySelectorAll('form[action*="/settings"]').forEach(function(f){
+                            f.addEventListener('submit', function(e){ e.preventDefault(); });
+                            f.querySelectorAll('input, select, textarea, button').forEach(function(el){
+                                el.disabled = true;
+                                el.classList.add('opacity-60','cursor-not-allowed');
+                            });
+                        });
+                    } catch (e) { /* ignore */ }
+                });
+            </script>
+            @endif
             <!-- Сообщения об успехе или ошибке -->
             @if(session('success'))
             <div id="success-alert" class="mb-4 p-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
@@ -28,6 +329,8 @@
                 </div>
             </div>
             @endif
+
+            
 
             @if(session('error'))
             <div id="error-alert" class="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">

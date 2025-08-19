@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Route middleware aliases
+        $middleware->alias([
+            'can-edit' => \App\Http\Middleware\EnsureCanEdit::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

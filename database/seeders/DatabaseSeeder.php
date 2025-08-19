@@ -32,6 +32,10 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        $this->call([
+            ViewerUserSeeder::class,
+        ]);
+
         // StockPosition::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

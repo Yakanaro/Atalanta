@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\PolishType;
 use App\Models\ProductType;
 use App\Models\StoneType;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\StockPosition;
+use Illuminate\Support\Facades\Hash;
 
 class SettingsController extends Controller
 {
@@ -17,8 +19,9 @@ class SettingsController extends Controller
         $polishTypes = PolishType::orderBy('name')->get();
         $productTypes = ProductType::orderBy('name')->get();
         $stoneTypes = StoneType::orderBy('name')->get();
+        $users = User::orderBy('email')->get();
         
-        return view('settings', compact('polishTypes', 'productTypes', 'stoneTypes'));
+        return view('settings', compact('polishTypes', 'productTypes', 'stoneTypes', 'users'));
     }
     
     public function addPolishType(Request $request): RedirectResponse
@@ -143,4 +146,86 @@ class SettingsController extends Controller
         return redirect()->route('settings.index')
             ->with('success', 'Вид камня успешно удален.');
     }
-} 
+
+    /**
+     * Create a new user with generated password and selected role.
+     */
+    public function createUser(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['nullable', 'string', 'max:255'],
+            'username' => ['nullable', 'string', 'alpha_dash', 'min:3', 'max:30', 'unique:users,username', 'required_without:email'],
+            'email' => ['nullable', 'email', 'max:255', 'unique:users,email', 'required_without:username'],
+            'role' => ['nullable', 'in:viewer'],
+        ]);
+
+        $passwordPlain = str()->password(12);
+
+        // Имя может быть необязательным: используем фолбэк на username или email, чтобы не нарушать ограничение NOT NULL до миграции
+        $resolvedName = $validated['name']
+            ?? ($validated['username'] ?? ($validated['email'] ?? ''));
+
+        $user = User::create([
+            'name' => $resolvedName,
+            'username' => $validated['username'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'password' => Hash::make($passwordPlain),
+            'role' => $validated['role'] ?? null,
+        ]);
+
+        return redirect()->route('settings.index')
+            ->with('success', 'Пользователь создан')
+            ->with('generated_password', $passwordPlain)
+            ->with('generated_password_email', $user->email)
+            ->with('generated_password_user_id', $user->id)
+            ->with('generated_password_username', $user->username);
+    }
+
+    /**
+     * Update a user's role (only 'viewer' or null).
+     */
+    public function updateUserRole(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'role' => ['nullable', 'in:viewer'],
+        ]);
+
+        $user->update([
+            'role' => $validated['role'] ?? null,
+        ]);
+
+        return redirect()->route('settings.index')->with('success', 'Роль пользователя обновлена');
+    }
+
+    /**
+     * Delete a user. Prevent deleting yourself.
+     */
+    public function deleteUser(Request $request, User $user): RedirectResponse
+    {
+        if ($request->user()->id === $user->id) {
+            return redirect()->route('settings.index')->with('error', 'Нельзя удалить самого себя.');
+        }
+
+        $user->delete();
+
+        return redirect()->route('settings.index')->with('success', 'Пользователь удалён.');
+    }
+
+    /**
+     * Reset user's password: generate a new one, save hash, flash plain password for display.
+     */
+    public function resetUserPassword(Request $request, User $user): RedirectResponse
+    {
+        $passwordPlain = str()->password(12);
+        $user->update([
+            'password' => Hash::make($passwordPlain),
+        ]);
+
+        return redirect()->route('settings.index')
+            ->with('success', 'Пароль пользователя сброшен')
+            ->with('generated_password', $passwordPlain)
+            ->with('generated_password_email', $user->email)
+            ->with('generated_password_user_id', $user->id)
+            ->with('generated_password_username', $user->username);
+    }
+}

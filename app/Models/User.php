@@ -19,8 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -44,5 +46,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Determine if user has viewer role (read-only access).
+     */
+    public function isViewer(): bool
+    {
+        return ($this->role === 'viewer');
+    }
+
+    /**
+     * Determine if user can perform edit/mutate actions.
+     */
+    public function canEdit(): bool
+    {
+        return !$this->isViewer();
     }
 }
