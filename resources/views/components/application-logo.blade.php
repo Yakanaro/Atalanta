@@ -1,1 +1,1 @@
-<img src="{{ asset('images/logo.jpeg') }}" alt="Аталанта" {{ $attributes }} style="width: 100%; height: 100%; object-fit: contain;" />
+<img src="{{ asset('images/logo.jpeg') }}" alt="Аталанта" {{ $attributes->merge(['class' => 'object-contain']) }} />
