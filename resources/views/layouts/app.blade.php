@@ -22,6 +22,8 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
+
     <!-- Flowbite CSS removed: styles come from Tailwind build via plugin to avoid overriding dark classes -->
 
     <!-- Установка темной темы по умолчанию -->
