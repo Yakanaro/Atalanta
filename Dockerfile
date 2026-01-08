@@ -59,6 +59,12 @@ RUN echo "upload_max_filesize = 100M" >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo "max_input_time = 600" >> /usr/local/etc/php/conf.d/uploads.ini \
     && echo "memory_limit = 512M" >> /usr/local/etc/php/conf.d/uploads.ini
 
+# Настройка PHP-FPM для работы с Docker
+RUN sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's/;listen.owner = www-data/listen.owner = www-data/g' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's/;listen.group = www-data/listen.group = www-data/g' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's/;listen.mode = 0660/listen.mode = 0660/g' /usr/local/etc/php-fpm.d/www.conf
+
 # Установка ImageMagick расширения
 RUN pecl install imagick && docker-php-ext-enable imagick
 
