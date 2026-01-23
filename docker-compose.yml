@@ -13,15 +13,16 @@ services:
       - ./public/images:/var/www/public/images
       - assets:/var/www/public
     environment:
-      - APP_ENV=production
-      - APP_DEBUG=false
-      - DB_HOST=mysql
-      - DB_DATABASE=atalanta
-      - DB_USERNAME=atalanta
-      - DB_PASSWORD=password
-      - QUEUE_CONNECTION=sync
-      - CACHE_DRIVER=database
-      - SESSION_DRIVER=database
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - DB_HOST=${DB_HOST:-mysql}
+      - DB_PORT=${DB_PORT:-3306}
+      - DB_DATABASE=${DB_DATABASE:-atalanta}
+      - DB_USERNAME=${DB_USERNAME:-atalanta}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - QUEUE_CONNECTION=${QUEUE_CONNECTION:-sync}
+      - CACHE_DRIVER=${CACHE_DRIVER:-database}
+      - SESSION_DRIVER=${SESSION_DRIVER:-database}
     depends_on:
       - mysql
     networks:
@@ -50,14 +51,14 @@ services:
     container_name: atalanta-mysql
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: atalanta
-      MYSQL_USER: atalanta
-      MYSQL_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: ${DB_DATABASE:-atalanta}
+      MYSQL_USER: ${DB_USERNAME:-atalanta}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password}
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
     networks:
       - atalanta-network
 
@@ -84,15 +85,16 @@ services:
   #     - ./.env:/var/www/.env
   #     - ./storage:/var/www/storage
   #   environment:
-  #     - APP_ENV=production
-  #     - APP_DEBUG=false
-  #     - DB_HOST=mysql
-  #     - DB_DATABASE=atalanta
-  #     - DB_USERNAME=atalanta
-  #     - DB_PASSWORD=password
-  #     - REDIS_HOST=redis
-  #     - REDIS_PORT=6379
-  #     - QUEUE_CONNECTION=redis
+  #     - APP_ENV=${APP_ENV:-production}
+  #     - APP_DEBUG=${APP_DEBUG:-false}
+  #     - DB_HOST=${DB_HOST:-mysql}
+  #     - DB_PORT=${DB_PORT:-3306}
+  #     - DB_DATABASE=${DB_DATABASE:-atalanta}
+  #     - DB_USERNAME=${DB_USERNAME:-atalanta}
+  #     - DB_PASSWORD=${DB_PASSWORD:-password}
+  #     - REDIS_HOST=${REDIS_HOST:-redis}
+  #     - REDIS_PORT=${REDIS_PORT:-6379}
+  #     - QUEUE_CONNECTION=${QUEUE_CONNECTION:-redis}
   #   depends_on:
   #     - mysql
   #     - redis
@@ -100,29 +102,30 @@ services:
   #   networks:
   #     - atalanta-network
 
-  scheduler:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: atalanta-scheduler
-    restart: unless-stopped
-    command: sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
-    working_dir: /var/www
-    volumes:
-      - ./.env:/var/www/.env
-      - ./storage:/var/www/storage
-    environment:
-      - APP_ENV=production
-      - APP_DEBUG=false
-      - DB_HOST=mysql
-      - DB_DATABASE=atalanta
-      - DB_USERNAME=atalanta
-      - DB_PASSWORD=password
-    depends_on:
-      - mysql
-      - app
-    networks:
-      - atalanta-network
+  # scheduler:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: atalanta-scheduler
+  #   restart: unless-stopped
+  #   command: sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
+  #   working_dir: /var/www
+  #   volumes:
+  #     - ./.env:/var/www/.env
+  #     - ./storage:/var/www/storage
+  #   environment:
+  #     - APP_ENV=${APP_ENV:-production}
+  #     - APP_DEBUG=${APP_DEBUG:-false}
+  #     - DB_HOST=${DB_HOST:-mysql}
+  #     - DB_PORT=${DB_PORT:-3306}
+  #     - DB_DATABASE=${DB_DATABASE:-atalanta}
+  #     - DB_USERNAME=${DB_USERNAME:-atalanta}
+  #     - DB_PASSWORD=${DB_PASSWORD:-password}
+  #   depends_on:
+  #     - mysql
+  #     - app
+  #   networks:
+  #     - atalanta-network
 
 volumes:
   mysql_data:
