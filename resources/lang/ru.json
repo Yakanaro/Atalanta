@@ -34,5 +34,11 @@
     "Confirm": "Подтвердить",
     "Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn't receive the email, we will gladly send you another.": "Спасибо за регистрацию! Прежде чем начать, не могли бы вы подтвердить свой адрес электронной почты, нажав на ссылку, которую мы только что отправили вам по электронной почте? Если вы не получили письмо, мы с радостью отправим вам другое.",
     "A new verification link has been sent to the email address you provided during registration.": "Новая ссылка для подтверждения была отправлена на адрес электронной почты, который вы указали при регистрации.",
-    "Resend Verification Email": "Отправить письмо для подтверждения повторно"
+    "Resend Verification Email": "Отправить письмо для подтверждения повторно",
+    "pagination.previous": "Предыдущая",
+    "pagination.next": "Следующая",
+    "pagination.showing": "Показано",
+    "pagination.to": "до",
+    "pagination.of": "из",
+    "pagination.results": "результатов"
 } 

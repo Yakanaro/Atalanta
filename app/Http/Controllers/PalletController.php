@@ -95,7 +95,7 @@ class PalletController extends Controller
             });
         }
 
-        $pallets = $query->orderBy('created_at', 'desc')->get();
+        $pallets = $query->orderBy('created_at', 'desc')->paginate(15)->withQueryString();
 
         // Добавляем статистику для каждого поддона
         $pallets->each(function ($pallet) {

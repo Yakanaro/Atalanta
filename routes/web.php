@@ -46,6 +46,8 @@ Route::middleware(['auth', 'can-edit'])->group(function () {
 Route::middleware(['auth','can-edit'])->group(function () {
     Route::get('/stock-position/create', [StockPositionController::class, 'create'])->name('stockPosition.create');
     Route::post('/stock-position/store', [StockPositionController::class, 'store'])->name('stockPosition.store');
+    Route::get('/stock-position/import', [StockPositionController::class, 'import'])->name('stockPosition.import');
+    Route::post('/stock-position/import', [StockPositionController::class, 'processImport'])->name('stockPosition.processImport');
     Route::get('/stock-position/{stockPosition}/edit', [StockPositionController::class, 'edit'])->name('stockPosition.edit');
     Route::put('/stock-position/{stockPosition}', [StockPositionController::class, 'update'])->name('stockPosition.update');
     Route::delete('/stock-position/{stockPosition}', [StockPositionController::class, 'destroy'])->name('stockPosition.destroy');

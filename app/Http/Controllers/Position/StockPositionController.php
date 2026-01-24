@@ -19,7 +19,10 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Exports\StockPositionsExport;
+use App\Http\Requests\StockPosition\ImportStockPositionsRequest;
+use App\Imports\StockPositionsImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class StockPositionController extends Controller
 {
@@ -173,5 +176,64 @@ class StockPositionController extends Controller
     public function export()
     {
         return Excel::download(new StockPositionsExport, 'stock_positions.xlsx');
+    }
+
+    public function import(): View
+    {
+        return view('stockPosition.import');
+    }
+
+    public function processImport(ImportStockPositionsRequest $request): RedirectResponse
+    {
+        try {
+            DB::beginTransaction();
+
+            $import = new StockPositionsImport();
+            Excel::import($import, $request->file('file'));
+
+            $stats = $import->getStats();
+
+            DB::commit();
+
+            $message = sprintf(
+                'Импорт завершен. Создано: %d, Обновлено: %d. ' .
+                'Создано новых типов продукции: %d, видов полировки: %d, видов камня: %d, поддонов: %d.',
+                $stats['created'],
+                $stats['updated'],
+                $stats['created_types']['product_types'],
+                $stats['created_types']['polish_types'],
+                $stats['created_types']['stone_types'],
+                $stats['created_types']['pallets']
+            );
+
+            if (!empty($stats['errors'])) {
+                $errorCount = count($stats['errors']);
+                $message .= " Обнаружено ошибок: {$errorCount}.";
+                return redirect()
+                    ->route('stockPosition.import')
+                    ->with('success', $message)
+                    ->with('import_errors', array_slice($stats['errors'], 0, 50));
+            }
+
+            return redirect()
+                ->route('stockPosition.import')
+                ->with('success', $message);
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            DB::rollBack();
+            $failures = $e->failures();
+            $errors = [];
+            foreach ($failures as $failure) {
+                $errors[] = "Строка {$failure->row()}: " . implode(', ', $failure->errors());
+            }
+            return redirect()
+                ->route('stockPosition.import')
+                ->with('error', 'Ошибка валидации данных в файле.')
+                ->with('import_errors', $errors);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return redirect()
+                ->route('stockPosition.import')
+                ->with('error', 'Ошибка при импорте: ' . $exception->getMessage());
+        }
     }
 }

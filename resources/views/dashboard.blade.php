@@ -45,6 +45,15 @@
                             Добавить позицию
                         </span>
                     </a>
+                    <a href="{{ route('stockPosition.import') }}"
+                        class="inline-block text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">
+                        <span class="flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            Импорт Excel
+                        </span>
+                    </a>
                     <a href="{{ route('stockPosition.export') }}"
                         class="inline-block text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">
                         <span class="flex items-center">
@@ -490,6 +499,13 @@
                 </table>
             </div>
 
+            <!-- Пагинация для десктопов -->
+            @if($pallets->hasPages())
+            <div class="mt-6 hidden md:block">
+                {{ $pallets->links() }}
+            </div>
+            @endif
+
             <!-- Карточки для мобильных устройств (скрыты на десктопах) -->
             <div class="md:hidden space-y-4">
                 @if(count($pallets) === 0)
@@ -647,6 +663,13 @@
                 </div>
                 @endforeach
             </div>
+
+            <!-- Пагинация для мобильных -->
+            @if($pallets->hasPages())
+            <div class="mt-6 md:hidden">
+                {{ $pallets->links() }}
+            </div>
+            @endif
         </div>
     </div>
 
