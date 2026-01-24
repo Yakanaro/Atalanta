@@ -1,6 +1,6 @@
 # Makefile для управления Docker контейнерами
 
-.PHONY: help build up down restart logs shell migrate seed fresh install deploy
+.PHONY: help build up down restart logs shell migrate seed fresh install deploy dev-up dev-down dev-build dev-logs dev-shell dev-vite-logs dev-restart dev-migrate dev-migrate-fresh dev-migrate-fresh-seed dev-status dev-cache-clear
 
 # Цвета для вывода
 RED=\033[0;31m
@@ -88,8 +88,56 @@ clean: ## Очистка Docker системы
 	docker system prune -f
 	docker volume prune -f
 
-dev: ## Запуск в режиме разработки
-	@echo "$(GREEN)Запуск в режиме разработки...$(NC)"
-	docker compose up -d
+dev-up: ## Запуск dev окружения (локальная разработка)
+	@echo "$(GREEN)Запуск dev окружения...$(NC)"
+	docker compose -f docker-compose.dev.yml up -d
+	@echo "$(GREEN)Dev окружение запущено! Приложение доступно на http://localhost:8080$(NC)"
+
+dev-down: ## Остановка dev окружения
+	@echo "$(YELLOW)Остановка dev окружения...$(NC)"
+	docker compose -f docker-compose.dev.yml down
+
+dev-build: ## Сборка dev контейнеров
+	@echo "$(GREEN)Сборка dev контейнеров...$(NC)"
+	docker compose -f docker-compose.dev.yml build
+
+dev-restart: ## Перезапуск dev окружения
+	@echo "$(YELLOW)Перезапуск dev окружения...$(NC)"
+	docker compose -f docker-compose.dev.yml restart
+
+dev-logs: ## Просмотр логов dev окружения
+	@echo "$(GREEN)Просмотр логов dev окружения...$(NC)"
+	docker compose -f docker-compose.dev.yml logs -f
+
+dev-shell: ## Вход в контейнер приложения (dev)
+	@echo "$(GREEN)Вход в контейнер приложения (dev)...$(NC)"
+	docker compose -f docker-compose.dev.yml exec app bash
+
+dev-vite-logs: ## Просмотр логов Vite dev server
+	@echo "$(GREEN)Просмотр логов Vite...$(NC)"
+	docker compose -f docker-compose.dev.yml logs -f vite
+
+dev-migrate: ## Выполнение миграций (dev)
+	@echo "$(GREEN)Выполнение миграций (dev)...$(NC)"
+	docker compose -f docker-compose.dev.yml exec app php artisan migrate
+
+dev-migrate-fresh: ## Пересоздание БД и выполнение миграций (dev)
+	@echo "$(RED)Пересоздание БД и миграций (dev)...$(NC)"
+	docker compose -f docker-compose.dev.yml exec app php artisan migrate:fresh
+
+dev-migrate-fresh-seed: ## Пересоздание БД, миграции и сидеры (dev)
+	@echo "$(RED)Пересоздание БД, миграции и сидеры (dev)...$(NC)"
+	docker compose -f docker-compose.dev.yml exec app php artisan migrate:fresh --seed
+
+dev-status: ## Статус dev контейнеров
+	@echo "$(GREEN)Статус dev контейнеров:$(NC)"
+	docker compose -f docker-compose.dev.yml ps
+
+dev-cache-clear: ## Очистка кеша в dev окружении
+	@echo "$(GREEN)Очистка кеша в dev окружении...$(NC)"
+	docker compose -f docker-compose.dev.yml exec app php artisan config:clear || true
+	docker compose -f docker-compose.dev.yml exec app php artisan route:clear || true
+	docker compose -f docker-compose.dev.yml exec app php artisan view:clear || true
+	docker compose -f docker-compose.dev.yml exec app php artisan tinker --execute="DB::purge('mysql');" || true
 
  

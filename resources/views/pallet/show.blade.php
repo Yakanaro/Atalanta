@@ -44,7 +44,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-semibold mb-4">Информация о поддоне</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-7 gap-4">
                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                             <div class="text-sm text-gray-600 dark:text-gray-400">Номер поддона</div>
                             <div class="text-lg font-semibold">{{ $pallet->number }}</div>
@@ -52,6 +52,10 @@
                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                             <div class="text-sm text-gray-600 dark:text-gray-400">Заказ</div>
                             <div class="text-lg font-semibold">{{ $pallet->order_number ?: '—' }}</div>
+                        </div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <div class="text-sm text-gray-600 dark:text-gray-400">Ряд</div>
+                            <div class="text-lg font-semibold">{{ $pallet->row ?: '—' }}</div>
                         </div>
                         <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                             <div class="text-sm text-gray-600 dark:text-gray-400">Статус</div>

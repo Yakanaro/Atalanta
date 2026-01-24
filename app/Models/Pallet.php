@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property int $id
  * @property string $number
  * @property string $status
+ * @property int|null $row
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\StockPosition[] $stockPositions
@@ -39,6 +40,7 @@ class Pallet extends Model
         'number',
         'order_number',
         'status',
+        'row',
         'qr_code_path',
         'image_path',
     ];
@@ -267,3 +269,4 @@ class Pallet extends Model
         return $this->image_path ? asset($this->image_path) : null;
     }
 }
+

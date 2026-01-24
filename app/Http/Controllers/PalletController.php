@@ -48,6 +48,10 @@ class PalletController extends Controller
             $query->where('order_number', 'like', '%' . $request->input('filter_order_number') . '%');
         }
 
+        if ($request->filled('filter_row')) {
+            $query->where('row', $request->input('filter_row'));
+        }
+
         // Фильтрация по статусу поддона
         if ($request->filled('filter_status')) {
             $query->where('status', $request->input('filter_status'));
@@ -159,6 +163,7 @@ class PalletController extends Controller
             $pallet = Pallet::create([
                 'number' => Pallet::generateNextNumber(),
                 'order_number' => $request->input('order_number'),
+                'row' => $request->input('row'),
             ]);
 
             // Обрабатываем загрузку изображения
@@ -247,6 +252,7 @@ class PalletController extends Controller
             $updateData = [
                 'number' => $request->getNumber(),
                 'order_number' => $request->input('order_number'),
+                'row' => $request->input('row'),
             ];
 
             // Обрабатываем загрузку изображения
@@ -466,3 +472,4 @@ class PalletController extends Controller
         return Excel::download(new PalletsExport, 'pallets.xlsx');
     }
 }
+

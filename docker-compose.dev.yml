@@ -1,0 +1,70 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: atalanta-app-dev
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./.env:/var/www/.env
+      - .:/var/www
+      - ./storage:/var/www/storage
+      - ./bootstrap/cache:/var/www/bootstrap/cache
+      - ./docker-entrypoint.dev.sh:/usr/local/bin/docker-entrypoint.dev.sh
+    environment:
+      - DB_HOST=host.docker.internal
+      - CACHE_DRIVER=file
+      - CACHE_STORE=file
+      - SESSION_DRIVER=file
+      - VITE_DEV_SERVER_URL=http://vite:5173
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - atalanta-dev-network
+    entrypoint: ["/usr/local/bin/docker-entrypoint.dev.sh"]
+    command: ["php-fpm"]
+
+  vite:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: atalanta-vite-dev
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - .:/var/www
+      - /var/www/node_modules
+    environment:
+      - NODE_ENV=development
+    entrypoint: []
+    command: sh -c "npm install && npm run dev -- --host"
+    ports:
+      - "5173:5173"
+    networks:
+      - atalanta-dev-network
+    depends_on:
+      - app
+
+  nginx:
+    image: nginx:alpine
+    container_name: atalanta-nginx-dev
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf
+      - ./public:/var/www/public:ro
+      - ./storage/app/public:/var/www/storage/app/public:ro
+    depends_on:
+      - app
+      - vite
+    networks:
+      - atalanta-dev-network
+
+volumes:
+  assets:
+
+networks:
+  atalanta-dev-network:
+    driver: bridge

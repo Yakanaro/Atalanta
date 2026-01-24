@@ -15,6 +15,7 @@ class StorePalletRequest extends FormRequest
     {
         return [
             'order_number' => 'nullable|string|max:255',
+            'row' => 'nullable|integer|min:1',
             'positions' => 'nullable|array',
             'positions.*.product_type_id' => 'required|exists:product_types,id',
             'positions.*.length' => 'required|numeric|min:0',
@@ -31,6 +32,8 @@ class StorePalletRequest extends FormRequest
     {
         return [
             'order_number.max' => 'Поле заказ не должно превышать 255 символов.',
+            'row.integer' => 'Ряд должен быть целым числом.',
+            'row.min' => 'Ряд должен быть больше 0.',
             'positions.*.product_type_id.required' => 'Необходимо выбрать вид продукции.',
             'positions.*.product_type_id.exists' => 'Выбранный вид продукции не существует.',
             'positions.*.length.required' => 'Длина обязательна для заполнения.',
@@ -58,7 +61,6 @@ class StorePalletRequest extends FormRequest
     {
         $positions = $this->validated('positions') ?? [];
 
-        // Добавляем расчет веса для каждой позиции
         foreach ($positions as &$position) {
             $position['weight'] = $this->calculateWeight(
                 $position['length'],
@@ -92,3 +94,4 @@ class StorePalletRequest extends FormRequest
         return $this->file('image');
     }
 }
+

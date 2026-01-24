@@ -29,6 +29,7 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
             'ID поддона',
             'Номер поддона',
             'Заказ',
+            'Ряд',
             'Количество позиций',
             'Общий вес (кг)',
             'Общее количество',
@@ -48,12 +49,10 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
     {
         $positions = $pallet->stockPositions;
 
-        // Подсчитываем статистику
         $totalWeight = $positions->sum('weight');
         $totalQuantity = $positions->sum('quantity');
         $positionsCount = $positions->count();
 
-        // Получаем основные типы продукции
         $productTypes = $positions->whereNotNull('productType')
             ->groupBy('productType.name')
             ->map(function ($group) {
@@ -64,7 +63,6 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
             ->keys()
             ->join(', ');
 
-        // Получаем основные виды полировки
         $polishTypes = $positions->whereNotNull('polishType')
             ->groupBy('polishType.name')
             ->map(function ($group) {
@@ -75,7 +73,6 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
             ->keys()
             ->join(', ');
 
-        // Получаем основные типы камня
         $stoneTypes = $positions->whereNotNull('stoneType')
             ->groupBy('stoneType.name')
             ->map(function ($group) {
@@ -90,6 +87,7 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
             $pallet->id,
             $pallet->number,
             $pallet->order_number,
+            $pallet->row ?: '-',
             $positionsCount,
             $this->formatNumber($totalWeight),
             $totalQuantity,
@@ -107,7 +105,6 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
     public function styles(Worksheet $sheet)
     {
         return [
-            // Стиль для заголовков
             1 => ['font' => ['bold' => true]],
         ];
     }
@@ -127,3 +124,4 @@ class PalletsExport implements FromCollection, WithHeadings, WithMapping, Should
         return number_format($number, 2);
     }
 }
+
