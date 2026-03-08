@@ -4,6 +4,7 @@ use App\Http\Controllers\PalletController;
 use App\Http\Controllers\Position\StockPositionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\StatisticsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,6 +20,8 @@ Route::middleware('auth')->group(function () {
 
     // Settings index is visible to all authenticated users
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
+    Route::get('/statistics', [StatisticsController::class, 'index'])->name('statistics.index');
+    Route::get('/statistics/export', [StatisticsController::class, 'export'])->name('statistics.export');
 });
 
 // Settings mutations (admin/editor only)
